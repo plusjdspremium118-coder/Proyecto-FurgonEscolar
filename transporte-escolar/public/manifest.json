@@ -1,0 +1,16 @@
+{
+  "short_name": "RutaSegura",
+  "name": "RutaSegura - Transporte Escolar PWA",
+  "icons": [
+    {
+      "src": "/bus-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#F9FAFB",
+  "theme_color": "#FFB800",
+  "display": "standalone",
+  "orientation": "portrait"
+}
