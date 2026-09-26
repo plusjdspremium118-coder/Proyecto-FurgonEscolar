@@ -106,28 +106,38 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-dvh w-full flex items-center justify-center bg-[#F1F5F9] px-4 py-8">
-      <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+    <div className="relative min-h-dvh w-full flex items-center justify-center px-4 py-8 sm:py-12 overflow-x-hidden">
+      {/* Imagen de fondo temática de transporte escolar */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat fixed transform scale-105"
+        style={{ backgroundImage: "url('/login-bg.jpg')" }}
+      />
+      {/* Capa de superposición con gradiente suave para garantizar perfecta legibilidad y contraste */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/50 to-[#0F172A]/75 backdrop-blur-[2px]" />
+
+      {/* Tarjeta principal de inicio de sesión con efecto glassmorphism */}
+      <div className="relative z-10 w-full max-w-[430px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/60 overflow-hidden">
 
         {/* Cabecera de marca */}
-        <div className="px-8 pt-10 pb-8 border-b border-[#E2E8F0]">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
-            style={{ background: '#E8A118' }}
-          >
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M8 7h8M6 11h12M5 15h14M4 19h16M12 3L4 7v12h16V7l-8-4z" />
-            </svg>
+        <div className="px-6 sm:px-8 pt-8 sm:pt-9 pb-6 border-b border-[#E2E8F0]/80">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md bg-gradient-to-tr from-[#D97706] to-[#F59E0B] text-white shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M8 7h8M6 11h12M5 15h14M4 19h16M12 3L4 7v12h16V7l-8-4z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
+                RutaSegura
+              </h1>
+              <p className="text-xs sm:text-sm font-semibold text-[#64748B]">
+                Transporte escolar · Inicia sesión
+              </p>
+            </div>
           </div>
-          <h1 className="text-[22px] font-bold text-[#0F172A] tracking-tight">
-            RutaSegura
-          </h1>
-          <p className="text-sm text-[#64748B] mt-1">
-            Transporte escolar · Inicia sesión
-          </p>
         </div>
 
-        <div className="px-8 py-8 space-y-6">
+        <div className="px-6 sm:px-8 py-6 sm:py-7 space-y-5">
 
           {/* Bloqueo de cuenta */}
           {isLocked && (
@@ -162,10 +172,10 @@ export default function Login() {
                 type="button"
                 id="role-apoderado-tab"
                 onClick={() => handleRoleSwitch('apoderado')}
-                className={`py-3 px-4 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${
+                className={`py-3 px-4 rounded-xl text-sm font-bold border transition-all cursor-pointer ${
                   role === 'apoderado'
-                    ? 'bg-[#FFFBEB] border-[#E8A118] text-[#92400E]'
-                    : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
+                    ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
+                    : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
                 }`}
               >
                 Apoderado
@@ -174,10 +184,10 @@ export default function Login() {
                 type="button"
                 id="role-conductor-tab"
                 onClick={() => handleRoleSwitch('conductor')}
-                className={`py-3 px-4 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${
+                className={`py-3 px-4 rounded-xl text-sm font-bold border transition-all cursor-pointer ${
                   role === 'conductor'
-                    ? 'bg-[#FFFBEB] border-[#E8A118] text-[#92400E]'
-                    : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
+                    ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
+                    : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
                 }`}
               >
                 Conductor
@@ -188,7 +198,7 @@ export default function Login() {
           {/* Formulario */}
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-[#334155]">
+              <label className="block text-sm font-semibold text-[#334155]">
                 Correo electrónico
               </label>
               <input
@@ -199,16 +209,16 @@ export default function Login() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="correo@ejemplo.cl"
-                className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all disabled:opacity-40 placeholder:text-[#CBD5E1]"
+                className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#CBD5E1] focus:border-[#D97706] focus:outline-none transition-all disabled:opacity-40 placeholder:text-[#94A3B8]"
               />
               {errors.email && (
-                <p className="text-xs text-[#DC2626] mt-1">{errors.email}</p>
+                <p className="text-xs font-semibold text-[#DC2626] mt-1">{errors.email}</p>
               )}
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-sm font-medium text-[#334155]">Contraseña</label>
+                <label className="block text-sm font-semibold text-[#334155]">Contraseña</label>
                 <span className="text-xs text-[#94A3B8]">Demo: password123</span>
               </div>
               <div className="relative">
@@ -220,7 +230,7 @@ export default function Login() {
                   value={form.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full pl-4 pr-11 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all disabled:opacity-40 placeholder:text-[#CBD5E1]"
+                  className="w-full pl-4 pr-11 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#CBD5E1] focus:border-[#D97706] focus:outline-none transition-all disabled:opacity-40 placeholder:text-[#94A3B8]"
                 />
                 <button
                   type="button"
@@ -241,12 +251,12 @@ export default function Login() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-xs text-[#DC2626] mt-1">{errors.password}</p>
+                <p className="text-xs font-semibold text-[#DC2626] mt-1">{errors.password}</p>
               )}
             </div>
 
             {failedCount > 0 && !isLocked && (
-              <p className="text-xs text-[#92400E] bg-[#FFFBEB] border border-[#FDE68A] px-3 py-2 rounded-lg">
+              <p className="text-xs font-semibold text-[#92400E] bg-[#FFFBEB] border border-[#FDE68A] px-3 py-2 rounded-xl">
                 Intentos fallidos: {failedCount}/3. Al tercer intento se bloqueará la cuenta.
               </p>
             )}
@@ -255,8 +265,11 @@ export default function Login() {
               type="submit"
               id="btn-login-submit"
               disabled={loading || isLocked}
-              className="w-full py-3.5 rounded-xl text-sm font-semibold text-white transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: loading || isLocked ? '#94A3B8' : '#E8A118' }}
+              className={`w-full py-3.5 rounded-xl text-sm font-bold text-white transition-all cursor-pointer shadow-md active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${
+                loading || isLocked
+                  ? 'bg-slate-400'
+                  : 'bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706]'
+              }`}
             >
               {loading ? 'Verificando...' : `Ingresar como ${role === 'apoderado' ? 'Apoderado' : 'Conductor'}`}
             </button>

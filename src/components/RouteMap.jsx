@@ -103,60 +103,79 @@ function FollowBus({ position }) {
   return null;
 }
 
+function MapCenterController({ centerPosition }) {
+  const map = useMap();
+  useEffect(() => {
+    if (centerPosition && typeof centerPosition.lat === 'number' && typeof centerPosition.lng === 'number') {
+      map.flyTo([centerPosition.lat, centerPosition.lng], centerPosition.zoom || 15, {
+        animate: true,
+        duration: 1,
+      });
+    }
+  }, [centerPosition, map]);
+  return null;
+}
+
 /* ── Main RouteMap component ─────────────── */
 
 export default function RouteMap({
   busPosition = null,
+  centerPosition = null,
   showStops = true,
   highlightStopName = null,
   interactive = true,
   className = '',
+  layerPosition = 'default', // 'default' | 'drive' | 'none'
   children,
 }) {
   const [routePath, setRoutePath] = useState([]);
-  const [mapType, setMapType] = useState('google'); // 'google' | 'satellite' | 'voyager'
+  const [mapType, setMapType] = useState('google'); // 'google' | 'satellite'
 
   useEffect(() => {
     fetchRoute(ROUTE_STOPS).then(setRoutePath);
   }, []);
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
-      {/* Selector flotante de capa de mapa estilo Google Maps */}
-      {interactive && (
-        <div className="absolute top-3 right-3 z-[1000] flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 shadow-md border border-[#E2E8F0] text-[11px] font-semibold text-[#64748B]">
+    <div className={`relative w-full h-full ${className} ${layerPosition === 'drive' ? '[&_.leaflet-top]:top-20' : ''}`}>
+      {/* Selector de capa de mapa con estilo armónico y posición adaptada */}
+      {interactive && layerPosition !== 'none' && (
+        <div
+          className={`absolute ${
+            layerPosition === 'drive'
+              ? 'top-20 right-3 sm:top-20 sm:right-4'
+              : layerPosition === 'below-header'
+              ? 'top-14 right-3'
+              : 'top-3 right-3'
+          } z-[900] flex items-center bg-white/95 backdrop-blur-md rounded-2xl p-1 shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#FDE68A] text-xs font-bold text-[#64748B] transition-all`}
+        >
+          <div className="w-5 h-5 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center shrink-0 ml-0.5 mr-1" title="Capas de mapa">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+          </div>
           <button
             type="button"
+            id="btn-layer-calles"
             onClick={() => setMapType('google')}
-            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer font-bold ${
               mapType === 'google'
-                ? 'bg-[#0F172A] text-white shadow-xs'
-                : 'hover:text-[#0F172A]'
+                ? 'bg-gradient-to-r from-[#D97706] to-[#E8A118] text-white shadow-xs font-black'
+                : 'text-[#64748B] hover:text-[#92400E] hover:bg-[#FEF3C7]/60'
             }`}
           >
-            Google Calles
+            Calles
           </button>
           <button
             type="button"
+            id="btn-layer-satelite"
             onClick={() => setMapType('satellite')}
-            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer font-bold ${
               mapType === 'satellite'
-                ? 'bg-[#0F172A] text-white shadow-xs'
-                : 'hover:text-[#0F172A]'
+                ? 'bg-gradient-to-r from-[#1E293B] to-[#0F172A] text-white shadow-xs font-black'
+                : 'text-[#64748B] hover:text-[#92400E] hover:bg-[#FEF3C7]/60'
             }`}
           >
             Satélite
-          </button>
-          <button
-            type="button"
-            onClick={() => setMapType('voyager')}
-            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-              mapType === 'voyager'
-                ? 'bg-[#0F172A] text-white shadow-xs'
-                : 'hover:text-[#0F172A]'
-            }`}
-          >
-            Limpio
           </button>
         </div>
       )}
@@ -187,15 +206,6 @@ export default function RouteMap({
             url="https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
             subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
             maxZoom={20}
-          />
-        )}
-
-        {mapType === 'voyager' && (
-          <TileLayer
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-            subdomains={['a', 'b', 'c', 'd']}
-            maxZoom={19}
           />
         )}
 
@@ -270,6 +280,7 @@ export default function RouteMap({
         )}
 
         {busPosition && <FollowBus position={busPosition} />}
+        {centerPosition && <MapCenterController centerPosition={centerPosition} />}
 
         {children}
       </MapContainer>

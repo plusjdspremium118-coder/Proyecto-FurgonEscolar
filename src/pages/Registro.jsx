@@ -74,28 +74,38 @@ export default function Registro() {
   }
 
   return (
-    <div className="min-h-dvh w-full flex items-center justify-center bg-[#F1F5F9] px-4 py-8">
-      <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+    <div className="relative min-h-dvh w-full flex items-center justify-center px-4 py-8 sm:py-12 overflow-x-hidden">
+      {/* Imagen de fondo temática de transporte escolar */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat fixed transform scale-105"
+        style={{ backgroundImage: "url('/login-bg.jpg')" }}
+      />
+      {/* Capa de superposición con gradiente suave para garantizar perfecta legibilidad y contraste */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/50 to-[#0F172A]/75 backdrop-blur-[2px]" />
+
+      {/* Tarjeta principal de registro con efecto glassmorphism */}
+      <div className="relative z-10 w-full max-w-[460px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/60 overflow-hidden my-auto">
 
         {/* Cabecera */}
-        <div className="px-8 pt-10 pb-8 border-b border-[#E2E8F0]">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
-            style={{ background: '#E8A118' }}
-          >
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
+        <div className="px-6 sm:px-8 pt-8 sm:pt-9 pb-6 border-b border-[#E2E8F0]/80">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md bg-gradient-to-tr from-[#D97706] to-[#F59E0B] text-white shrink-0">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
+                Crear cuenta
+              </h1>
+              <p className="text-xs sm:text-sm font-semibold text-[#64748B]">
+                RutaSegura · Registro de nuevo usuario
+              </p>
+            </div>
           </div>
-          <h1 className="text-[22px] font-bold text-[#0F172A] tracking-tight">
-            Crear cuenta
-          </h1>
-          <p className="text-sm text-[#64748B] mt-1">
-            RutaSegura · Registro de nuevo usuario
-          </p>
         </div>
 
-        <div className="px-8 py-8">
+        <div className="px-6 sm:px-8 py-6 sm:py-7">
           {submitted ? (
             <div className="py-10 text-center space-y-3">
               <div className="w-12 h-12 rounded-full bg-[#F0FDF4] border border-[#BBF7D0] flex items-center justify-center mx-auto">
@@ -124,24 +134,24 @@ export default function Registro() {
                     onClick={() => setForm((p) => ({ ...p, role: 'apoderado' }))}
                     className={`min-h-[64px] py-2.5 px-3.5 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-center ${
                       form.role === 'apoderado'
-                        ? 'bg-[#FFFBEB] border-[#E8A118] text-[#92400E]'
-                        : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
+                        ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
+                        : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
                     }`}
                   >
-                    <span className="block text-sm font-semibold truncate">Apoderado</span>
-                    <span className="block text-xs text-[#94A3B8] font-normal truncate mt-0.5">Monitorear a mi hijo</span>
+                    <span className="block text-sm font-bold truncate">Apoderado</span>
+                    <span className="block text-xs text-[#94A3B8] font-semibold truncate mt-0.5">Monitorear a mi hijo</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((p) => ({ ...p, role: 'conductor' }))}
                     className={`min-h-[64px] py-2.5 px-3.5 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-center ${
                       form.role === 'conductor'
-                        ? 'bg-[#FFFBEB] border-[#E8A118] text-[#92400E]'
-                        : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
+                        ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
+                        : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
                     }`}
                   >
-                    <span className="block text-sm font-semibold truncate">Conductor</span>
-                    <span className="block text-xs text-[#94A3B8] font-normal truncate mt-0.5">Gestionar mi ruta</span>
+                    <span className="block text-sm font-bold truncate">Conductor</span>
+                    <span className="block text-xs text-[#94A3B8] font-semibold truncate mt-0.5">Gestionar mi ruta</span>
                   </button>
                 </div>
               </div>
@@ -309,8 +319,7 @@ export default function Registro() {
               <button
                 type="submit"
                 id="btn-register-submit"
-                className="w-full py-3.5 rounded-xl text-sm font-semibold text-white transition-all cursor-pointer mt-2"
-                style={{ background: '#E8A118' }}
+                className="w-full py-3.5 rounded-xl text-sm font-bold text-white transition-all cursor-pointer mt-2 bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] shadow-md active:scale-95"
               >
                 Crear cuenta
               </button>
