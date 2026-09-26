@@ -120,12 +120,12 @@ export default function Login() {
 
         {/* Cabecera de marca */}
         <div className="px-6 sm:px-8 pt-8 sm:pt-9 pb-6 border-b border-[#E2E8F0]/80">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md bg-gradient-to-tr from-[#D97706] to-[#F59E0B] text-white shrink-0">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M8 7h8M6 11h12M5 15h14M4 19h16M12 3L4 7v12h16V7l-8-4z" />
-              </svg>
-            </div>
+          <div className="flex items-center gap-3.5">
+            <img
+              src="/app-icon.png"
+              alt="RutaSegura"
+              className="w-13 h-13 rounded-2xl shadow-md border border-[#FDE68A] shrink-0 object-cover"
+            />
             <div>
               <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
                 RutaSegura

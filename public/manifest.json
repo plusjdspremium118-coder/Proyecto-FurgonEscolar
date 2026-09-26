@@ -3,9 +3,15 @@
   "name": "RutaSegura - Transporte Escolar PWA",
   "icons": [
     {
+      "src": "/app-icon.png",
+      "type": "image/png",
+      "sizes": "512x512 192x192",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/bus-icon.svg",
       "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
+      "sizes": "any"
     }
   ],
   "start_url": "/",

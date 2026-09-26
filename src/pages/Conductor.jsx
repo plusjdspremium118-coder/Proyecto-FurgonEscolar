@@ -746,14 +746,16 @@ export default function Conductor() {
                 </div>
 
                 {/* Mapa interactivo */}
-                <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-                  <RouteMap
-                    busPosition={currentBusLocation}
-                    centerPosition={mapCenterPosition}
-                    showStops={true}
-                    interactive={true}
-                    layerPosition="default"
-                  />
+                <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)] bg-[#F8FAFC]">
+                  {!isDriveMode && (
+                    <RouteMap
+                      busPosition={currentBusLocation}
+                      centerPosition={mapCenterPosition}
+                      showStops={true}
+                      interactive={true}
+                      layerPosition="default"
+                    />
+                  )}
                 </div>
 
                 {/* Orden sugerido de paradas */}
@@ -832,7 +834,7 @@ export default function Conductor() {
             MODO VIAJE / PANTALLA COMPLETA (Estilo Uber / Waze)
             ══════════════════════════════════════════════════════════════════ */}
         {isDriveMode && (
-          <div className="fixed inset-0 z-50 bg-[#0F172A] flex flex-col overflow-hidden animate-fade-in">
+          <div className="fixed inset-0 z-[9999] bg-[#0F172A] flex flex-col overflow-hidden animate-fade-in">
             {/* Barra superior de navegación flotante con controles de conductor */}
             <header className="absolute top-0 left-0 right-0 z-[1001] px-3 sm:px-4 py-3 bg-gradient-to-b from-black/80 via-black/40 to-transparent flex items-center justify-between gap-2.5 pointer-events-none">
               <button

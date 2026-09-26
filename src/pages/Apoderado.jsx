@@ -779,7 +779,6 @@ export default function Apoderado() {
                   showStops={true}
                   highlightStopName={studentAssignedStop}
                   interactive={true}
-                  layerPosition="below-header"
                 />
               </div>
 
