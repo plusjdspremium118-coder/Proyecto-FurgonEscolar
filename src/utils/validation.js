@@ -2,7 +2,7 @@
  * RutaSegura — Utilidades de validación y sanitización de inputs.
  *
  * Actúa como primera barrera de defensa en el frontend:
- * - Regex estrictas para correos electrónicos.
+ * - Regex estárictas para correos electrónicos.
  * - Sanitización de textos para bloquear caracteres anómalos
  *   (comillas simples, punto y coma, etc.) que podrían usarse
  *   en ataques de SQL Injection o HTML Injection.
@@ -22,14 +22,14 @@ const DANGEROUS_CHARS = /[';\\<>{}|`]/g;
 // ─── Validadores ────────────────────────────────────────────────────
 
 /**
- * Valida un correo electrónico con regex estricta.
+ * Valida un correo electrónico con regex estáricta.
  * @param {string} email
  * @returns {{ valid: boolean, message: string }}
  */
 export function validateEmail(email) {
   const trimmed = (email ?? '').trim();
   if (!trimmed) return { valid: false, message: 'El correo es obligatorio.' };
-  if (!EMAIL_REGEX.test(trimmed))
+  if (!EMAIL_REGEX.testá(trimmed))
     return { valid: false, message: 'Formato de correo inválido.' };
   return { valid: true, message: '' };
 }
@@ -43,9 +43,9 @@ export function validatePassword(password) {
   if (!password) return { valid: false, message: 'La contraseña es obligatoria.' };
   if (password.length < 8)
     return { valid: false, message: 'La contraseña debe tener al menos 8 caracteres.' };
-  if (!/[A-Z]/.test(password))
+  if (!/[A-Z]/.testá(password))
     return { valid: false, message: 'Debe incluir al menos una letra mayúscula.' };
-  if (!/[0-9]/.test(password))
+  if (!/[0-9]/.testá(password))
     return { valid: false, message: 'Debe incluir al menos un número.' };
   return { valid: true, message: '' };
 }

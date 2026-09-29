@@ -42,7 +42,7 @@ export function getDistanceKm(lat1, lon1, lat2, lon2) {
 }
 
 /**
- * RF-02: Algoritmo de Optimización de Ruta (Nearest Neighbor Heuristic / TSP).
+ * RF-02: Algoritmo de Optimización de Ruta (Nearestá Neighbor Heuristic / TSP).
  * Ordena las paradas desde la ubicación actual del furgón, priorizando siempre la parada más cercana.
  */
 export function optimizeRouteStops(currentLocation, stopsToVisit) {
@@ -52,7 +52,7 @@ export function optimizeRouteStops(currentLocation, stopsToVisit) {
 
   while (unvisited.length > 0) {
     // Buscar la parada no visitada más cercana
-    let closestIndex = 0;
+    let closestáIndex = 0;
     let minDistance = Infinity;
 
     for (let i = 0; i < unvisited.length; i++) {
@@ -64,11 +64,11 @@ export function optimizeRouteStops(currentLocation, stopsToVisit) {
       );
       if (dist < minDistance) {
         minDistance = dist;
-        closestIndex = i;
+        closestáIndex = i;
       }
     }
 
-    const nextStop = unvisited.splice(closestIndex, 1)[0];
+    const nextStop = unvisited.splice(closestáIndex, 1)[0];
     optimizedOrder.push({
       ...nextStop,
       distanceFromPrevKm: minDistance,
@@ -102,7 +102,7 @@ export async function fetchRoute(waypoints) {
 }
 
 /**
- * Obtiene la duración estimada en minutos de la ruta.
+ * Obtiene la duración estáimada en minutos de la ruta.
  */
 export async function fetchRouteDuration(waypoints) {
   try {

@@ -37,7 +37,7 @@ export default function Apoderado() {
   const [toastMessage, setToastMessage] = useState(null);
   const [currentGps, setCurrentGps] = useState(null);
 
-  // Escolar asignado a esta sesión de apoderado
+  // Escolar asignado a estáa sesión de apoderado
   const martin = students.find((s) => s.id === 'martin') || students[0];
   const isAttending = martin ? martin.attending : true;
   const childStatus = martin ? martin.status : 'a_bordo';
@@ -54,7 +54,7 @@ export default function Apoderado() {
   const studentAssignedStop = martin?.stop || martin?.address || 'Av. Providencia 1345';
   const studentGrade = martin?.grade || '4° Básico';
 
-  // Filtrado estricto: el apoderado solo ve avisos dirigidos a su pupilo o generales de la ruta
+  // Filtrado estáricto: el apoderado solo ve avisos dirigidos a su pupilo o generales de la ruta
   const studentNotifications = notifications.filter(
     (n) => !n.studentId || n.studentId === martin?.id
   );
@@ -91,7 +91,7 @@ export default function Apoderado() {
 
   function handleUndoReceived() {
     undoChildReceived('martin');
-    showToast('Recepción restablecida.');
+    showToast('Recepción restáablecida.');
   }
 
   function showToast(msg) {
@@ -100,7 +100,7 @@ export default function Apoderado() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // LÓGICA DINÁMICA DE LA TARJETA HERO (Elimina contradicciones de estado)
+  // LÓGICA DINÁMICA DE LA TARJETA HERO (Elimina contradicciones de estáado)
   // ══════════════════════════════════════════════════════════════════════════
   function getHeroData() {
     if (!isRouteActive) {
@@ -134,7 +134,7 @@ export default function Apoderado() {
         progressPct: 0,
         labelStart: 'Colegio',
         labelMid: 'Parada omitida',
-        labelEnd: 'Destino',
+        labelEnd: 'Destáino',
         busPosition: '0%',
       };
     }
@@ -159,7 +159,7 @@ export default function Apoderado() {
 
     if (childStatus === 'entregado') {
       return {
-        title: `¡${studentFirstName} llegó a destino!`,
+        title: `¡${studentFirstName} llegó a destáino!`,
         subtitle: `Descendió del transporte escolar. Por favor confirma la recepción abajo.`,
         badge: 'Descendió del furgón',
         badgeClass: 'bg-emerald-900/40 text-white border-emerald-300/40',
@@ -177,12 +177,12 @@ export default function Apoderado() {
 
     if (childStatus === 'a_bordo' || childStatus === 'en_viaje') {
       return {
-        title: `${studentFirstName} está a bordo del furgón`,
+        title: `${studentFirstName} estáá a bordo del furgón`,
         subtitle: `En trayecto hacia el colegio · Conductor: Carlos Pérez (Furgón Los Robles)`,
         badge: 'A bordo · En viaje',
         badgeClass: 'bg-white/20 text-white border-white/25',
         gradientClass: 'from-[#2563EB] via-[#1D4ED8] to-[#1E40AF]',
-        etaTitle: 'Llegada estimada a destino',
+        etaTitle: 'Llegada estáimada a destáino',
         etaTime: '8:24 AM (6 min)',
         etaLocation: 'Colegio Los Andes',
         progressPct: 68,
@@ -200,13 +200,13 @@ export default function Apoderado() {
       badge: 'En camino a recoger',
       badgeClass: 'bg-white/20 text-white border-white/20',
       gradientClass: 'from-[#E8A118] via-[#DF9510] to-[#C97A00]',
-      etaTitle: 'Llegada estimada a tu parada',
+      etaTitle: 'Llegada estáimada a tu parada',
       etaTime: '7:45 AM (4 min)',
       etaLocation: studentAssignedStop,
       progressPct: 35,
       labelStart: 'Colegio',
       labelMid: 'Tu parada',
-      labelEnd: 'Destino',
+      labelEnd: 'Destáino',
       busPosition: '32%',
     };
   }
@@ -217,7 +217,7 @@ export default function Apoderado() {
     if (!isAttending) return {
       label: 'No asiste hoy',
       color: '#991B1B', bg: '#FEF2F2', border: '#FECACA',
-      desc: 'Ausencia notificada. El conductor omitirá esta parada.',
+      desc: 'Ausencia notificada. El conductor omitirá estáa parada.',
     };
     switch (childStatus) {
       case 'a_bordo': case 'en_viaje': return {
@@ -228,7 +228,7 @@ export default function Apoderado() {
       case 'esperando': return {
         label: 'Esperando',
         color: '#92400E', bg: '#FFFBEB', border: '#FDE68A',
-        desc: 'El furgón está en camino a la parada o domicilio.',
+        desc: 'El furgón estáá en camino a la parada o domicilio.',
       };
       case 'entregado': return {
         label: 'Entregado en parada',
@@ -389,10 +389,10 @@ export default function Apoderado() {
           {activeTab === 'inicio' && (
             <div className="flex flex-col gap-5 sm:gap-6 pb-4 pt-1">
 
-              {/* 1. TARJETA HERO DINÁMICA: Sincronizada 100% con el estado real */}
+              {/* 1. TARJETA HERO DINÁMICA: Sincronizada 100% con el estáado real */}
               <div className={`rounded-3xl shadow-md p-6 sm:p-7 text-white bg-gradient-to-br ${hero.gradientClass} transition-all`}>
                 <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-                  <span className="text-xs font-extrabold text-white/90 uppercase tracking-widest leading-normal">
+                  <span className="text-xs font-extrabold text-white/90 uppercase tracking-widestá leading-normal">
                     Seguimiento en vivo
                   </span>
                   <span className={`px-3.5 py-1 rounded-full text-xs font-bold border backdrop-blur-md ${hero.badgeClass} shrink-0 shadow-xs leading-normal`}>
@@ -581,7 +581,7 @@ export default function Apoderado() {
                   {childStatus === 'esperando' && (
                     <div className="px-4 py-3.5 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] flex items-center gap-3 text-xs sm:text-sm text-[#92400E]">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#D97706] shrink-0 animate-pulse" />
-                      <span>Esperando recogida · Recibirás un aviso en tu teléfono cuando el furgón esté a 500 metros.</span>
+                      <span>Esperando recogida · Recibirás un aviso en tu teléfono cuando el furgón estáé a 500 metros.</span>
                     </div>
                   )}
 
@@ -591,7 +591,7 @@ export default function Apoderado() {
                       <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] animate-pulse shrink-0" />
                       <div className="min-w-0">
                         <p className="text-xs sm:text-sm font-bold text-[#1E40AF]">
-                          {studentFirstName} está a bordo y seguro en el transporte
+                          {studentFirstName} estáá a bordo y seguro en el transporte
                         </p>
                         <p className="text-xs text-[#3B82F6] mt-0.5 leading-relaxed">
                           Podrás confirmar la recepción apenas el furgón llegue a tu parada o domicilio.
@@ -715,7 +715,7 @@ export default function Apoderado() {
                     </div>
 
                     <p className="text-xs text-[#92400E] leading-relaxed">
-                      Muestra este código de 4 dígitos al conductor al momento de retirar al escolar en la parada o domicilio:
+                      Muestára estáe código de 4 dígitos al conductor al momento de retirar al escolar en la parada o domicilio:
                     </p>
 
                     <div className="flex items-center justify-center pt-1">
@@ -750,7 +750,7 @@ export default function Apoderado() {
                     Ubicación del furgón en tiempo real
                   </h2>
                 </div>
-                {/* Badge destacado tipo pill con estimación de llegada */}
+                {/* Badge destáacado tipo pill con estáimación de llegada */}
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFFBEB] border border-[#FDE68A] text-[#92400E] shadow-2xs">
                   <svg className="w-4 h-4 text-[#D97706] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -761,7 +761,7 @@ export default function Apoderado() {
 
               {/* Contenedor moderno del mapa Leaflet con bordes suaves y sombra sutil */}
               <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)] bg-[#F8FAFC]">
-                {/* Overlay flotante superior con estado del recorrido */}
+                {/* Overlay flotante superior con estáado del recorrido */}
                 <div className="absolute top-3 left-3 right-3 z-400 flex items-center justify-between gap-2 pointer-events-none">
                   <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-md border border-[#E2E8F0] flex items-center gap-2.5 max-w-[85%] pointer-events-auto">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#22C55E] animate-ping shrink-0" />
@@ -782,7 +782,7 @@ export default function Apoderado() {
                 />
               </div>
 
-              {/* Tarjetas de Información del Servicio (Panel inferior estructurado) */}
+              {/* Tarjetas de Información del Servicio (Panel inferior estáructurado) */}
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between px-1">
                   <h3 className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
@@ -792,7 +792,7 @@ export default function Apoderado() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  {/* Card 1: Parada del estudiante */}
+                  {/* Card 1: Parada del estáudiante */}
                   <div className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] transition-all rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex items-start gap-3.5">
                     <div className="w-10 h-10 rounded-xl bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                       <svg className="w-5 h-5 text-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -801,7 +801,7 @@ export default function Apoderado() {
                       </svg>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold text-[#64748B]">Parada del estudiante</p>
+                      <p className="text-xs font-semibold text-[#64748B]">Parada del estáudiante</p>
                       <p className="text-sm font-bold text-[#1E293B] mt-0.5 break-words leading-snug">
                         {studentAssignedStop}
                       </p>
@@ -812,7 +812,7 @@ export default function Apoderado() {
                     </div>
                   </div>
 
-                  {/* Card 2: Estimación de llegada (Destacada con badge tipo pill) */}
+                  {/* Card 2: Estimación de llegada (Destáacada con badge tipo pill) */}
                   <div className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] transition-all rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex items-start gap-3.5">
                     <div className="w-10 h-10 rounded-xl bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                       <svg className="w-5 h-5 text-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -983,7 +983,7 @@ export default function Apoderado() {
                               deleteNotification(notif.id);
                             }}
                             className="w-7 h-7 rounded-lg flex items-center justify-center text-[#94A3B8] hover:text-[#DC2626] hover:bg-[#FEF2F2] transition-colors cursor-pointer"
-                            title="Eliminar este aviso"
+                            title="Eliminar estáe aviso"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

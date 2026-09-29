@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+Ôªøimport { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../utils/validation';
-import { API_BASE_URL } from '../config';
 import { useTransportState } from '../data/useTransportState';
 
 export default function Login() {
@@ -50,7 +49,7 @@ export default function Login() {
     const next = {};
     const emailResult = validateEmail(form.email);
     if (!emailResult.valid) next.email = emailResult.message;
-    if (!form.password) next.password = 'La contraseÒa es obligatoria.';
+    if (!form.password) next.password = 'La contrase√±a es obligatoria.';
     return next;
   }
 
@@ -65,7 +64,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('${API_BASE_URL}/api/auth/login', {
+      const response = await fetch('http://localhost:8000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo: form.email, contrasena: form.password, rol: role })
@@ -124,7 +123,7 @@ export default function Login() {
           <h1 className="login-brand-title">RutaSegura</h1>
           <span className="login-badge-subtitle">Transporte escolar</span>
           <h2 className="login-welcome-title">Bienvenido de nuevo</h2>
-          <p className="login-desc">Inicia sesiÛn para continuar</p>
+          <p className="login-desc">Inicia sesi√≥n para continuar</p>
         </div>
 
         <div className="login-form">
@@ -166,7 +165,7 @@ export default function Login() {
               onClick={() => handleRoleSwitch('apoderado')}
               className={`role-tab-btn ${role === 'apoderado' ? 'active' : ''}`}
             >
-              <span className="role-icon">????????</span>
+              <span className="role-icon">üë®‚Äçüë©‚Äçüëß</span>
               <span className="role-btn-text">
                 <strong>Apoderado</strong>
                 <small>Padre / Madre / Tutor</small>
@@ -180,17 +179,17 @@ export default function Login() {
               onClick={() => handleRoleSwitch('conductor')}
               className={`role-tab-btn ${role === 'conductor' ? 'active' : ''}`}
             >
-              <span className="role-icon">??</span>
+              <span className="role-icon">üöå</span>
               <span className="role-btn-text">
                 <strong>Conductor</strong>
-                <small>Chofer del furgÛn</small>
+                <small>Chofer del furg√≥n</small>
               </span>
             </button>
           </div>
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="input-group">
-              <label htmlFor="login-email">Correo electrÛnico</label>
+              <label htmlFor="login-email">Correo electr√≥nico</label>
               <input
                 type="email"
                 name="email"
@@ -206,7 +205,7 @@ export default function Login() {
             </div>
 
             <div className="input-group">
-              <label htmlFor="login-password">ContraseÒa</label>
+              <label htmlFor="login-password">Contrase√±a</label>
               <div style={{ position: 'relative' }}>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -215,7 +214,7 @@ export default function Login() {
                   disabled={isLocked}
                   value={form.password}
                   onChange={handleChange}
-                  placeholder="ïïïïïïïï"
+                  placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
                   className={errors.password ? 'input-error' : ''}
                   autoComplete="current-password"
                 />
@@ -223,7 +222,7 @@ export default function Login() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  aria-label={showPassword ? 'Ocultar contraseÒa' : 'Ver contraseÒa'}
+                  aria-label={showPassword ? 'Ocultar contrase√±a' : 'Ver contrase√±a'}
                 >
                   {showPassword ? (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -242,7 +241,7 @@ export default function Login() {
 
             {failedCount > 0 && !isLocked && (
               <p style={{ fontSize: '11px', fontWeight: 600, color: '#946900', background: '#fff7d6', border: '1px solid #f6df8d', padding: '8px 12px', borderRadius: 'var(--radius-sm)' }}>
-                Intentos fallidos: {failedCount}/3. Al tercer intento se bloquear· la cuenta.
+                Intentos fallidos: {failedCount}/3. Al tercer intento se bloquear√° la cuenta.
               </p>
             )}
 
@@ -257,8 +256,8 @@ export default function Login() {
           </form>
 
           <div className="login-footer-links">
-            <p className="no-account-text">øSin cuenta?</p>
-            <Link to="/registro" className="register-link-btn">RegÌstrate aquÌ</Link>
+            <p className="no-account-text">¬ø¬øSin cuenta?</p>
+            <Link to="/registro" className="register-link-btn">Reg√≠strate aqu√≠</Link>
           </div>
 
           <div className="login-security-notice">
@@ -266,11 +265,10 @@ export default function Login() {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span>Tu informaciÛn est· protegida con encriptaciÛn de extremo a extremo</span>
+            <span>Tu informaci√≥n est√°√° protegida con encriptaci√≥n de extremo a extremo</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

@@ -27,7 +27,7 @@ export default function Conductor() {
   } = useTransportState();
 
   const [activeTab, setActiveTab] = useState('escolares');
-  // Filtro interactivo por estado ('todos' | 'por_recoger' | 'a_bordo' | 'entregados' | 'ausentes')
+  // Filtro interactivo por estáado ('todos' | 'por_recoger' | 'a_bordo' | 'entregados' | 'ausentes')
   const [filterStatus, setFilterStatus] = useState('todos');
   const [isDriveMode, setIsDriveMode] = useState(false);
   const [mapCenterPosition, setMapCenterPosition] = useState(null);
@@ -122,7 +122,7 @@ export default function Conductor() {
     if (!completedStopIds.includes(stop.id)) {
       setCompletedStopIds((prev) => [...prev, stop.id]);
     }
-    // Notificar a alumnos de esta parada
+    // Notificar a alumnos de estáa parada
     const stopStudents = students.filter(s =>
       s.stop?.toLowerCase().includes(stop.name.toLowerCase()) ||
       stop.name.toLowerCase().includes(s.stop?.toLowerCase()) ||
@@ -234,7 +234,7 @@ export default function Conductor() {
               <div>
                 <div className="flex items-center justify-between mb-1.5 px-0.5">
                   <p className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
-                    Filtrar por estado
+                    Filtrar por estáado
                   </p>
                   {filterStatus !== 'todos' && (
                     <button
@@ -364,7 +364,7 @@ export default function Conductor() {
               )}
             </div>
 
-            {/* Pestañas Principales (Escolares / Mapa) */}
+            {/* Pestáañas Principales (Escolares / Mapa) */}
             <div className="flex bg-[#E2E8F0]/70 p-1 rounded-xl">
               <button
                 type="button"
@@ -543,7 +543,7 @@ export default function Conductor() {
                               </div>
                             </div>
 
-                            {/* Badge de estado amplio y legible */}
+                            {/* Badge de estáado amplio y legible */}
                             <span
                               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shrink-0 ${statusBadge.bg} ${statusBadge.text} ${statusBadge.border}`}
                             >
@@ -796,7 +796,7 @@ export default function Conductor() {
                               type="button"
                               onClick={() => handleCenterOnStop(stop)}
                               className="w-8 h-8 rounded-lg bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] flex items-center justify-center text-[#D97706] shadow-2xs active:scale-95 cursor-pointer"
-                              title="Centrar mapa en esta parada"
+                              title="Centrar mapa en estáa parada"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -895,7 +895,7 @@ export default function Conductor() {
               {/* Barra indicadora superior */}
               <div className="w-12 h-1.5 bg-[#CBD5E1] rounded-full mx-auto my-2 shrink-0" />
 
-              {/* Banner de Próxima Parada Destacada */}
+              {/* Banner de Próxima Parada Destáacada */}
               <div className="px-4 sm:px-5 pb-3 border-b border-[#F1F5F9] shrink-0">
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0 flex-1">
@@ -904,7 +904,7 @@ export default function Conductor() {
                         PRÓXIMA PARADA
                       </span>
                       <span className="text-xs font-bold text-[#166534]">
-                        {getDistanceKm(currentBusLocation.lat, currentBusLocation.lng, nextStop.lat, nextStop.lng)} km restantes
+                        {getDistanceKm(currentBusLocation.lat, currentBusLocation.lng, nextStop.lat, nextStop.lng)} km restáantes
                       </span>
                     </div>
                     <h3 className="var(--muted)ase sm:text-lg font-black text-[#0F172A] mt-1 truncate">
@@ -918,7 +918,7 @@ export default function Conductor() {
                       type="button"
                       onClick={() => handleCenterOnStop(nextStop)}
                       className="h-10 px-3 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] hover:bg-[#F1F5F9] text-[#0F172A] text-xs font-bold flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
-                      title="Centrar cámara en esta parada"
+                      title="Centrar cámara en estáa parada"
                     >
                       <svg className="w-4 h-4 text-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -940,7 +940,7 @@ export default function Conductor() {
                 </div>
               </div>
 
-              {/* Lista Secuencial de la Ruta Completa (Parada 1, 2, 3... hasta Destino) */}
+              {/* Lista Secuencial de la Ruta Completa (Parada 1, 2, 3... hasta Destáino) */}
               <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-3 space-y-2 custom-scroll">
                 <p className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-1">
                   Secuencia completa de paradas ({optimalStops.length} puntos)
@@ -993,7 +993,7 @@ export default function Conductor() {
                           </div>
                           <p className="text-[11px] text-[#64748B] truncate">
                             {stop.type === 'school'
-                              ? '🏫 Destino final'
+                              ? '🏫 Destáino final'
                               : stopStudents.length > 0
                               ? `${stopStudents.map(s => s.name.split(' ')[0]).join(', ')} (${stopStudents.length} alumnos)`
                               : stop.address}
@@ -1054,7 +1054,7 @@ export default function Conductor() {
                     onChange={(e) => { setInputCloseCode(e.target.value); setCloseError(''); }}
                     placeholder="••••"
                     maxLength={4}
-                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold var(--ink)xl tracking-widest text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold var(--ink)xl tracking-widestá text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
                   />
                   {closeError && <p className="text-xs font-semibold text-[#DC2626]">{closeError}</p>}
                   <p className="text-[11px] text-[#94A3B8] text-center font-medium">PIN de prueba: 1234</p>

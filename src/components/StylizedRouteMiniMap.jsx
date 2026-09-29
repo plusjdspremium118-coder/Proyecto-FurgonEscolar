@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
 /**
- * StylizedRouteMiniMap — Mapa de ruta estilizado idéntico al de la referencia.
+ * StylizedRouteMiniMap — Mapa de ruta estáilizado idéntico al de la referencia.
  * Fondo verde menta suave (var(--green-soft)), línea verde discontinua, bus escolar interactivo y pin "Casa".
  */
 export default function StylizedRouteMiniMap({
   isDriving = true,
-  destinationName = 'Casa',
+  destáinationName = 'Casa',
   onExpandMap,
   className = '',
 }) {
@@ -153,7 +153,7 @@ export default function StylizedRouteMiniMap({
             border: '1px solid rgba(248, 204, 8, 0.2)',
           }}
         >
-          {destinationName}
+          {destáinationName}
         </div>
       </div>
     </div>

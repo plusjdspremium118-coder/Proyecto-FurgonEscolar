@@ -1,8 +1,7 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../utils/validation';
 import { useTransportState } from '../data/useTransportState';
-import { API_BASE_URL } from '../config';
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ export default function Registro() {
     password: '',
     role: 'apoderado',
     studentName: '',
-    studentGrade: '4° Básico',
+    studentGrade: '4Â° BÃ¡sico',
     studentStop: '',
   });
   const [errors, setErrors] = useState({});
@@ -40,10 +39,10 @@ export default function Registro() {
 
     if (form.role === 'apoderado') {
       if (!form.studentName.trim()) {
-        next.studentName = 'El nombre del estudiante es obligatorio.';
+        next.studentName = 'El nombre del estÃ¡Ã¡udiante es obligatorio.';
       }
       if (!form.studentStop.trim()) {
-        next.studentStop = 'La dirección del domicilio o punto de recogida es obligatoria.';
+        next.studentStop = 'La direcciÃ³n del domicilio o punto de recogida es obligatoria.';
       }
     }
 
@@ -62,7 +61,7 @@ export default function Registro() {
     setServerError('');
 
     try {
-      const response = await fetch('${API_BASE_URL}/api/auth/registro', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/registro`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,7 +85,7 @@ export default function Registro() {
         return;
       }
 
-      // Guardar sesión
+      // Guardar sesiÃ³n
       if (data.usuario?.csrf_token) {
         sessionStorage.setItem('rutasegura_csrf_token', data.usuario.csrf_token);
         sessionStorage.setItem('rutasegura_user', JSON.stringify(data.usuario));
@@ -94,12 +93,12 @@ export default function Registro() {
 
     } catch (err) {
       // Backend offline
-      setServerError('No se pudo conectar al servidor. Asegúrate de que el backend esté corriendo en ${API_BASE_URL}');
+      setServerError(`No se pudo conectar al servidor backend. AsegÃºrate de que el backend estÃ¡Ã¡Ã© corriendo en ${API_BASE_URL}`);
       setLoading(false);
       return;
     }
 
-    // Registro local para estado de UI
+    // Registro local para estÃ¡Ã¡ado de UI
     if (form.role === 'apoderado') {
       registerApoderadoWithStudent({
         parentName: form.nombre,
@@ -133,7 +132,7 @@ export default function Registro() {
           <h1 className="login-brand-title">RutaSegura</h1>
           <span className="login-badge-subtitle">Transporte escolar</span>
           <h2 className="login-welcome-title">Crear cuenta</h2>
-          <p className="login-desc">Regístrate para acceder al servicio</p>
+          <p className="login-desc">RegÃ­strate para acceder al servicio</p>
         </div>
 
         <div className="register-form" style={{ paddingTop: '0' }}>
@@ -145,7 +144,7 @@ export default function Registro() {
                   <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
-              <h2>¡Cuenta creada!</h2>
+              <h2>Â¡Cuenta creada!</h2>
               <p className="success-message">
                 {form.role === 'apoderado'
                   ? `Estudiante ${form.studentName || 'registrado'} vinculado exitosamente en Supabase. Redirigiendo...`
@@ -212,7 +211,7 @@ export default function Registro() {
                   </svg>
                   <span>
                     <strong>Conductor</strong>
-                    <small>Gestionar mi ruta</small>
+                    <small>GestÃ¡Ã¡ionar mi ruta</small>
                   </span>
                 </button>
               </div>
@@ -225,7 +224,7 @@ export default function Registro() {
                   id="reg-nombre"
                   value={form.nombre}
                   onChange={handleChange}
-                  placeholder={form.role === 'apoderado' ? 'Ej. Sofía Reyes' : 'Ej. Carlos Pérez'}
+                  placeholder={form.role === 'apoderado' ? 'Ej. SofÃ­a Reyes' : 'Ej. Carlos PÃ©rez'}
                   className={errors.nombre ? 'input-error' : ''}
                   autoComplete="name"
                 />
@@ -233,7 +232,7 @@ export default function Registro() {
               </div>
 
               <div className="input-group">
-                <label htmlFor="reg-email">Correo electrónico</label>
+                <label htmlFor="reg-email">Correo electrÃ³nico</label>
                 <input
                   type="email"
                   name="email"
@@ -248,7 +247,7 @@ export default function Registro() {
               </div>
 
               <div className="input-group">
-                <label htmlFor="reg-password">Contraseña</label>
+                <label htmlFor="reg-password">ContraseÃ±a</label>
                 <div style={{ position: 'relative' }}>
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -256,7 +255,7 @@ export default function Registro() {
                     id="reg-password"
                     value={form.password}
                     onChange={handleChange}
-                    placeholder="Mínimo 8 caracteres"
+                    placeholder="MÃ­nimo 8 caracteres"
                     className={errors.password ? 'input-error' : ''}
                     autoComplete="new-password"
                   />
@@ -264,7 +263,7 @@ export default function Registro() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                    aria-label={showPassword ? 'Ocultar contraseÃ±a' : 'Ver contraseÃ±a'}
                   >
                     {showPassword ? (
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -291,19 +290,19 @@ export default function Registro() {
                       </label>
                     </div>
                     <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--green-deep)', background: 'var(--green-soft)', border: '1px solid #c2e2a8', padding: '2px 8px', borderRadius: '999px' }}>
-                      Furgón Los Robles
+                      FurgÃ³n Los Robles
                     </span>
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="reg-student-name">Nombre completo del estudiante</label>
+                    <label htmlFor="reg-student-name">Nombre completo del estÃ¡Ã¡udiante</label>
                     <input
                       type="text"
                       name="studentName"
                       id="reg-student-name"
                       value={form.studentName}
                       onChange={handleChange}
-                      placeholder="Ej. Martín Reyes"
+                      placeholder="Ej. MartÃ­n Reyes"
                       className={errors.studentName ? 'input-error' : ''}
                     />
                     {errors.studentName && <p className="error-text">{errors.studentName}</p>}
@@ -319,16 +318,16 @@ export default function Registro() {
                         onChange={handleChange}
                         style={{ width: '100%', padding: '12px 40px 12px 14px', border: '1.5px solid #d4dccb', borderRadius: 'var(--radius-sm)', fontSize: '14px', fontFamily: 'inherit', background: '#fafbf8', color: 'var(--ink)', appearance: 'none', cursor: 'pointer' }}
                       >
-                        <option value="1° Básico">1° Básico</option>
-                        <option value="2° Básico">2° Básico</option>
-                        <option value="3° Básico">3° Básico</option>
-                        <option value="4° Básico">4° Básico</option>
-                        <option value="5° Básico">5° Básico</option>
-                        <option value="6° Básico">6° Básico</option>
-                        <option value="7° Básico">7° Básico</option>
-                        <option value="8° Básico">8° Básico</option>
-                        <option value="1° Medio">1° Medio</option>
-                        <option value="2° Medio">2° Medio</option>
+                        <option value="1Â° BÃ¡sico">1Â° BÃ¡sico</option>
+                        <option value="2Â° BÃ¡sico">2Â° BÃ¡sico</option>
+                        <option value="3Â° BÃ¡sico">3Â° BÃ¡sico</option>
+                        <option value="4Â° BÃ¡sico">4Â° BÃ¡sico</option>
+                        <option value="5Â° BÃ¡sico">5Â° BÃ¡sico</option>
+                        <option value="6Â° BÃ¡sico">6Â° BÃ¡sico</option>
+                        <option value="7Â° BÃ¡sico">7Â° BÃ¡sico</option>
+                        <option value="8Â° BÃ¡sico">8Â° BÃ¡sico</option>
+                        <option value="1Â° Medio">1Â° Medio</option>
+                        <option value="2Â° Medio">2Â° Medio</option>
                       </select>
                       <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--muted)' }}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -339,7 +338,7 @@ export default function Registro() {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="reg-student-stop">Dirección de recogida / Domicilio</label>
+                    <label htmlFor="reg-student-stop">DirecciÃ³n de recogida / Domicilio</label>
                     <input
                       type="text"
                       name="studentStop"
@@ -367,12 +366,11 @@ export default function Registro() {
           )}
 
           <div className="login-footer-links">
-            <p className="no-account-text">¿Ya tienes cuenta?</p>
-            <Link to="/login" className="register-link-btn">Inicia sesión</Link>
+            <p className="no-account-text">Â¿Â¿Â¿Ya tienes cuenta?</p>
+            <Link to="/login" className="register-link-btn">Inicia sesiÃ³n</Link>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

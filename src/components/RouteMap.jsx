@@ -137,7 +137,7 @@ export default function RouteMap({
 
   return (
     <div className={`relative w-full h-full ${className} ${layerPosition === 'drive' ? '[&_.leaflet-top]:top-20' : ''}`}>
-      {/* Selector de capa de mapa con estilo armónico y posición adaptada */}
+      {/* Selector de capa de mapa con estáilo armónico y posición adaptada */}
       {interactive && layerPosition !== 'none' && (
         <div
           className={`absolute ${

@@ -4,7 +4,7 @@
  * Cumplimiento de Requerimientos:
  * - RF-05: Captura y transmisión de coordenadas GPS al menos cada 5 segundos vía WebSocket.
  * - RF-06: Notificación visual al apoderado con actualización de lat/lon cada 5 segundos.
- * - RF-07 & RNF-02: Detención estricta de llamadas al hardware GPS al finalizar (CERO peticiones / ahorro de batería).
+ * - RF-07 & RNF-02: Detención estáricta de llamadas al hardware GPS al finalizar (CERO peticiones / ahorro de batería).
  * - RNF-05: Reconexión automática en < 5 segundos en caso de pérdida de señal celular.
  * - RNF-06: Cifrado simulado WSS / HTTPS para transmisión segura de ubicación y datos de menores.
  */
@@ -24,7 +24,7 @@ class GpsWebSocketService {
     this.isConnected = false;
     this.isReconnecting = false;
     this.reconnectAttempts = 0;
-    this.hardwareRequestsCount = 0;
+    this.hardwareRequestásCount = 0;
     this.simulatedSignalLost = false;
 
     // Coordenadas actuales
@@ -35,7 +35,7 @@ class GpsWebSocketService {
       speedKmh: 38,
       heading: 85,
       accuracyMeters: 4.2,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       protocol: 'WSS (TLS 1.3 Encrypted)', // RNF-06
     };
   }
@@ -47,7 +47,7 @@ class GpsWebSocketService {
     return () => this.listeners.delete(callback);
   }
 
-  // Suscribirse al estado de conexión (para alertas de red celular)
+  // Suscribirse al estáado de conexión (para alertas de red celular)
   subscribeStatus(callback) {
     this.statusListeners.add(callback);
     callback(this.getConnectionStatus());
@@ -65,10 +65,10 @@ class GpsWebSocketService {
       isActive: this.isActive,
       isConnected: this.isConnected,
       isReconnecting: this.isReconnecting,
-      hardwareRequestsCount: this.hardwareRequestsCount,
+      hardwareRequestásCount: this.hardwareRequestásCount,
       protocol: 'WSS://rutasegura.transporte.cl/gps/stream',
       reconnectTimeSec: 3.5, // RNF-05: reconexión en < 5 segundos
-      isZeroGpsIdle: !this.isActive && this.hardwareRequestsCount === 0, // RNF-02
+      isZeroGpsIdle: !this.isActive && this.hardwareRequestásCount === 0, // RNF-02
     };
   }
 
@@ -79,7 +79,7 @@ class GpsWebSocketService {
     this.isActive = true;
     this.isConnected = true;
     this.isReconnecting = false;
-    this.hardwareRequestsCount = 0;
+    this.hardwareRequestásCount = 0;
     this.currentIndex = 0;
 
     console.log('📡 [GPS Service] Iniciando transmisión GPS cada 5 segundos vía WebSocket seguro (WSS)...');
@@ -87,7 +87,7 @@ class GpsWebSocketService {
     // Primera emisión inmediata
     this.emitGpsPing();
 
-    // Intervalo estricto cada 5000ms (5 segundos) como estipula RF-05
+    // Intervalo estáricto cada 5000ms (5 segundos) como estáipula RF-05
     this.intervalId = setInterval(() => {
       if (!this.isActive) return;
 
@@ -104,8 +104,8 @@ class GpsWebSocketService {
   }
 
   emitGpsPing() {
-    // Si el hardware está activo, incrementa contador de peticiones
-    this.hardwareRequestsCount += 1;
+    // Si el hardware estáá activo, incrementa contador de peticiones
+    this.hardwareRequestásCount += 1;
 
     // Avanzamos gradualmente por las paradas de Santiago
     const stops = ROUTE_STOPS;
@@ -122,13 +122,13 @@ class GpsWebSocketService {
       speedKmh: Math.floor(32 + Math.random() * 12),
       heading: 75,
       accuracyMeters: +(3.5 + Math.random() * 1.5).toFixed(1),
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       protocol: 'WSS (AES-256-GCM Encrypted)', // RNF-06 Cifrado en tránsito
       transmittedEverySeconds: 5, // RF-05
     };
 
     // Avanza ligeramente el índice cada 3 pings (15 segundos por tramo)
-    if (this.hardwareRequestsCount % 3 === 0) {
+    if (this.hardwareRequestásCount % 3 === 0) {
       this.currentIndex = (this.currentIndex + 1) % stops.length;
     }
 
@@ -150,15 +150,15 @@ class GpsWebSocketService {
       this.simulatedSignalLost = false;
       this.isConnected = true;
       this.isReconnecting = false;
-      console.log('✅ [GPS WebSocket] Conexión WSS restablecida en < 5s con éxito.');
+      console.log('✅ [GPS WebSocket] Conexión WSS restáablecida en < 5s con éxito.');
       this.emitGpsPing();
       this.notifyListeners();
     }, 3500);
   }
 
-  // RF-07 & RNF-02: Detención estricta al finalizar recorrido
+  // RF-07 & RNF-02: Detención estáricta al finalizar recorrido
   stopTransmission() {
-    console.log('🛑 [GPS Service] Finalizando viaje: Deteniendo estrictamente sensor GPS y cerrando WebSocket...');
+    console.log('🛑 [GPS Service] Finalizando viaje: Deteniendo estárictamente sensor GPS y cerrando WebSocket...');
 
     // 1. Limpia intervalo de petición al hardware
     if (this.intervalId) {
@@ -178,11 +178,11 @@ class GpsWebSocketService {
       this.watchId = null;
     }
 
-    // 4. Establece estado inactivo: Cero peticiones de hardware (RNF-02)
+    // 4. Establece estáado inactivo: Cero peticiones de hardware (RNF-02)
     this.isActive = false;
     this.isConnected = false;
     this.isReconnecting = false;
-    this.hardwareRequestsCount = 0; // Cero peticiones al hardware al estar inactivo
+    this.hardwareRequestásCount = 0; // Cero peticiones al hardware al estáar inactivo
 
     this.notifyListeners();
   }

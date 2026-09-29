@@ -1,9 +1,9 @@
 /**
- * transportState.js — Gestor de estado compartido con cumplimiento estricto de casos de uso:
+ * transportState.js — Gestáor de estáado compartido con cumplimiento estáricto de casos de uso:
  * - Autenticación y bloqueo de cuenta por 3 intentos fallidos
  * - Iniciar y Finalizar recorrido con código de seguridad (<extend> Ingresa código)
  * - Transmisión GPS en tiempo real
- * - Registro de asistencia: Subida (Recogido) y Bajada (Entregado) con timestamps
+ * - Registro de asistencia: Subida (Recogido) y Bajada (Entregado) con timestáamps
  * - Confirmación de asistencia del apoderado: Asiste / No asiste
  * - Cambio de apoderado autorizado con Generación de Código de retiro (<include> Generar código)
  * - Monitoreo y confirmación de recepción
@@ -116,7 +116,7 @@ export const INITIAL_NOTIFICATIONS = [
     title: 'Recorrido Matinal Iniciado',
     message: 'El conductor Carlos Pérez inició el recorrido y activó la transmisión GPS en vivo.',
     time: '8:05 AM',
-    timestamp: Date.now() - 1000 * 60 * 20,
+    timestáamp: Date.now() - 1000 * 60 * 20,
     read: true,
   },
   {
@@ -126,7 +126,7 @@ export const INITIAL_NOTIFICATIONS = [
     title: 'Aviso de Recogida',
     message: 'El furgón Los Robles se encuentra a 3-5 minutos de la Parada Los Leones.',
     time: '8:15 AM',
-    timestamp: Date.now() - 1000 * 60 * 10,
+    timestáamp: Date.now() - 1000 * 60 * 10,
     read: true,
   },
   {
@@ -136,7 +136,7 @@ export const INITIAL_NOTIFICATIONS = [
     title: 'Registro de Subida: Martín a bordo',
     message: 'Carlos Pérez confirmó que Martín abordó el furgón a las 8:18 AM.',
     time: '8:18 AM',
-    timestamp: Date.now() - 1000 * 60 * 7,
+    timestáamp: Date.now() - 1000 * 60 * 7,
     read: false,
   }
 ];
@@ -172,7 +172,7 @@ export function getInitialState() {
     routeInfo: {
       status: 'en_ruta', // 'esperando' | 'en_ruta' | 'finalizada'
       statusLabel: 'En camino a casa',
-      estimatedArrival: '8:24 AM',
+      estáimatedArrival: '8:24 AM',
       progress: 50,
       driverName: 'Carlos Pérez',
       driverPhone: '+56 9 9876 5432',
@@ -182,7 +182,7 @@ export function getInitialState() {
     // Seguridad y control de intentos fallidos de login
     loginSecurity: {
       failedAttempts: 0,
-      lockedUntil: null, // timestamp
+      lockedUntil: null, // timestáamp
     },
     lastAlert: null,
   };
@@ -208,7 +208,7 @@ export const TransportActions = {
       title: '🚀 Recorrido Iniciado',
       message: 'El conductor inició el recorrido y activó el rastreo GPS en tiempo real.',
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
     };
 
@@ -242,7 +242,7 @@ export const TransportActions = {
       title: '🏁 Recorrido Finalizado',
       message: `El conductor finalizó el recorrido oficial a las ${nowTime}. Transmisión GPS y sensor detenidos inmediatamente.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
     };
 
@@ -282,9 +282,9 @@ export const TransportActions = {
       title: isAttending ? 'Asistencia Confirmada' : 'Ausencia Notificada',
       message: isAttending
         ? `${student?.name} asistirá al colegio hoy. El conductor pasará por la parada.`
-        : `${student?.name} NO asistirá hoy. El conductor ha sido notificado para omitir esta parada.`,
+        : `${student?.name} NO asistirá hoy. El conductor ha sido notificado para omitir estáa parada.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
       studentId,
     };
@@ -322,7 +322,7 @@ export const TransportActions = {
       title: '🚌 Registro de Subida: Escolar a Bordo',
       message: `El conductor registró que ${student?.name} abordó el furgón a las ${nowTime}.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
       studentId,
     };
@@ -358,9 +358,9 @@ export const TransportActions = {
       id: `notif-${Date.now()}`,
       type: 'entrega',
       title: '🏠 Registro de Bajada: Escolar Entregado',
-      message: `${student?.name} descendió del furgón en su destino final a las ${nowTime}.`,
+      message: `${student?.name} descendió del furgón en su destáino final a las ${nowTime}.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
       studentId,
     };
@@ -399,9 +399,9 @@ export const TransportActions = {
       id: `notif-${Date.now()}`,
       type: 'codigo',
       title: '🔐 Nuevo Código de Retiro Generado',
-      message: `Se asignó a ${receiverName} con el código de seguridad ${newCode}. Presenta este código al conductor.`,
+      message: `Se asignó a ${receiverName} con el código de seguridad ${newCode}. Presenta estáe código al conductor.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
     };
 
@@ -437,7 +437,7 @@ export const TransportActions = {
       title: '🔑 Código de Seguridad Renovado',
       message: `Nuevo código de entrega generado: ${newCode}.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
     };
 
@@ -479,7 +479,7 @@ export const TransportActions = {
       title: '✅ Entrega Confirmada por Apoderado',
       message: `${receiver} confirmó la recepción de ${student?.name} a las ${nowTime}.`,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
       studentId,
     };
@@ -522,10 +522,10 @@ export const TransportActions = {
 
     if (noticeType === 'recogida_cerca') {
       title = '🔔 ¡Furgón aproximándose para recogida!';
-      message = `El conductor Carlos Pérez avisa que está a 3-5 minutos de recoger a ${student?.name}. Por favor prepárate en la parada.`;
+      message = `El conductor Carlos Pérez avisa que estáá a 3-5 minutos de recoger a ${student?.name}. Por favor prepárate en la parada.`;
     } else if (noticeType === 'entrega_cerca') {
       title = '🔔 ¡Furgón aproximándose para entrega!';
-      message = `El conductor avisa que está a 3 minutos de llegar al domicilio para entregar a ${student?.name}.`;
+      message = `El conductor avisa que estáá a 3 minutos de llegar al domicilio para entregar a ${student?.name}.`;
     }
 
     const notif = {
@@ -534,7 +534,7 @@ export const TransportActions = {
       title,
       message,
       time: nowTime,
-      timestamp: Date.now(),
+      timestáamp: Date.now(),
       read: false,
       studentId,
     };
