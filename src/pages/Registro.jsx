@@ -2,6 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail, validatePassword } from '../utils/validation';
 import { useTransportState } from '../data/useTransportState';
+import { API_BASE_URL } from '../config';
 
 export default function Registro() {
   const navigate = useNavigate();
@@ -93,7 +94,8 @@ export default function Registro() {
 
     } catch (err) {
       // Backend offline
-      setServerError(`No se pudo conectar al servidor backend. Asegúrate de que el backend esté corriendo en ${API_BASE_URL}`);
+      console.error('[Registro Error]:', err);
+      setServerError(`No se pudo conectar al servidor backend. Intenta nuevamente.`);
       setLoading(false);
       return;
     }
