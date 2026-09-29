@@ -1,7 +1,7 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getInitialState, TransportActions } from './transportState';
 
-const API = 'http://localhost:8000';
+import { API_BASE_URL as API } from '../config';
 
 function getUserSession() {
   try {
@@ -219,3 +219,4 @@ export function useTransportState() {
     registerApoderadoWithStudent,
   };
 }
+
