@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Variables de entorno — NUNCA subir al repositorio
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/*.db
+
+# Base de datos SQLite local
+*.db
+*.sqlite
+
+__pycache__/
+*.pyc
+temp.txt
+rutaSegura

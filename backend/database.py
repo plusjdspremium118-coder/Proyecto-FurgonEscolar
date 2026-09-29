@@ -1,86 +1,89 @@
 """
-database.py — Gestor de conexión a base de datos relacional (SQLite / PostgreSQL).
-Cumplimiento de RNF-03: Conexión centralizada reutilizada exclusivamente por clases DAO.
+database.py — Gestor de conexión a Supabase (PostgreSQL en la nube) para RutaSegura.
+Cumple con:
+- Arquitectura DAO (RNF-03): Conexión centralizada reutilizada exclusivamente por clases DAO.
+- Seguridad: Inicialización y sembrado con contraseñas cifradas PBKDF2-SHA256.
 """
 
-import sqlite3
 import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
+from security import hash_password
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "rutasegura.db")
+# Cargar variables de entorno desde .env
+env_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(env_path)
 
-def get_connection():
-    """Retorna una conexión activa a la base de datos."""
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://tpmbmaqfdwaqbombnkmt.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+
+_supabase_client: Client = None
+
+def get_supabase() -> Client:
+    """Retorna la instancia única del cliente oficial de Supabase."""
+    global _supabase_client
+    if _supabase_client is None:
+        _supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    return _supabase_client
+
+# Alias para compatibilidad
+get_connection = get_supabase
 
 def init_db():
-    """Inicializa el esquema de base de datos con tablas normalizadas."""
-    conn = get_connection()
-    cursor = conn.cursor()
+    """
+    Verifica el estado de las tablas en Supabase y siembra datos iniciales
+    de prueba si las tablas están vacías (con contraseñas cifradas y salt).
+    """
+    sb = get_supabase()
+    try:
+        res_users = sb.table("usuarios").select("id").execute()
+        if len(res_users.data) == 0:
+            print("[INFO] Sembrando usuarios iniciales en Supabase...")
+            pwd_hash, salt = hash_password("password123")
 
-    # Tabla Usuarios (RF-01, Sistema Login y Bloqueo de Cuenta)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        nombre TEXT NOT NULL,
-        rol TEXT NOT NULL CHECK(rol IN ('conductor', 'apoderado')),
-        intentos_fallidos INTEGER DEFAULT 0,
-        bloqueado_hasta TEXT
-    );
-    """)
+            carlos_res = sb.table("usuarios").insert({
+                "correo": "carlos.conductor@rutasegura.cl",
+                "contrasena_hash": pwd_hash,
+                "salt": salt,
+                "nombre": "Carlos Pérez",
+                "rol": "conductor",
+                "licencia": "A3-Profesional",
+                "telefono_emergencia": "+56 9 1122 3344"
+            }).execute()
 
-    # Tabla Estudiantes (RF-03, RF-04: Control de Asistencia, Subida y Bajada)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS estudiantes (
-        id TEXT PRIMARY KEY,
-        nombre TEXT NOT NULL,
-        grado TEXT NOT NULL,
-        direccion TEXT NOT NULL,
-        parada_id INTEGER NOT NULL,
-        apoderado_id INTEGER,
-        asiste_hoy INTEGER DEFAULT 1,
-        estado_viaje TEXT DEFAULT 'esperando' CHECK(estado_viaje IN ('esperando', 'en_viaje', 'entregado', 'recibido')),
-        hora_subida TEXT,
-        hora_bajada TEXT,
-        codigo_retiro TEXT DEFAULT '8429',
-        FOREIGN KEY (apoderado_id) REFERENCES usuarios(id)
-    );
-    """)
+            sofia_res = sb.table("usuarios").insert({
+                "correo": "sofia.reyes@email.cl",
+                "contrasena_hash": pwd_hash,
+                "salt": salt,
+                "nombre": "Sofía Reyes",
+                "rol": "apoderado",
+                "telefono_emergencia": "+56 9 8765 4321"
+            }).execute()
 
-    # Tabla Recorridos (RF-02, RF-07: Iniciar, Optimizar y Finalizar con código)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS recorridos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        conductor_id INTEGER NOT NULL,
-        patente_furgon TEXT NOT NULL,
-        estado TEXT DEFAULT 'iniciado' CHECK(estado IN ('iniciado', 'finalizado')),
-        fecha_inicio TEXT NOT NULL,
-        fecha_fin TEXT,
-        codigo_cierre_seguridad TEXT DEFAULT '1234',
-        FOREIGN KEY (conductor_id) REFERENCES usuarios(id)
-    );
-    """)
+            apoderado_id = sofia_res.data[0]["id"]
+            conductor_id = carlos_res.data[0]["id"]
 
-    # Tabla Ubicación GPS (RF-05: Transmisión cada 5 segundos)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS ubicaciones_gps (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        conductor_id INTEGER NOT NULL,
-        recorrido_id INTEGER NOT NULL,
-        latitud REAL NOT NULL,
-        longitud REAL NOT NULL,
-        velocidad_kmh REAL NOT NULL,
-        timestamp TEXT NOT NULL,
-        FOREIGN KEY (recorrido_id) REFERENCES recorridos(id)
-    );
-    """)
+            print("[INFO] Sembrando escolares iniciales...")
+            sb.table("escolares").insert([
+                {"nombre_completo": "Martín Morales", "direccion_hogar": "Av. Providencia 2100", "grado": "3° Básico A", "parada_id": 1, "id_apoderado": apoderado_id, "estado_actual": "esperando"},
+                {"nombre_completo": "Sofía Reyes", "direccion_hogar": "Los Leones 1420", "grado": "1° Básico B", "parada_id": 2, "id_apoderado": apoderado_id, "estado_actual": "esperando"},
+                {"nombre_completo": "Tomás González", "direccion_hogar": "Tobalaba 850", "grado": "2° Básico A", "parada_id": 3, "id_apoderado": apoderado_id, "estado_actual": "esperando"},
+                {"nombre_completo": "Valentina Silva", "direccion_hogar": "Av. Apoquindo 4500", "grado": "Kinder", "parada_id": 4, "id_apoderado": apoderado_id, "estado_actual": "esperando"},
+                {"nombre_completo": "Matías Rojas", "direccion_hogar": "Padre Hurtado 1200", "grado": "4° Básico B", "parada_id": 5, "id_apoderado": apoderado_id, "estado_actual": "esperando"}
+            ]).execute()
 
-    conn.commit()
-    conn.close()
+            sb.table("viajes").insert({
+                "id_conductor": conductor_id,
+                "patente_furgon": "ABCD-12",
+                "estado": "en_curso",
+                "codigo_cierre_seguridad": "1234"
+            }).execute()
+
+            print("[OK] Datos semilla inicializados con éxito en Supabase.")
+        else:
+            print(f"[OK] Supabase conectado. Existen {len(res_users.data)} usuarios registrados.")
+    except Exception as e:
+        print(f"[WARN] Error inicializando datos en Supabase: {e}")
 
 if __name__ == "__main__":
     init_db()
-    print("✅ Base de datos inicializada exitosamente.")

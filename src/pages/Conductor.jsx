@@ -148,12 +148,12 @@ export default function Conductor() {
 
   return (
     <div className="min-h-screen w-full flex justify-center bg-[#F1F5F9]">
-      <div className="w-full max-w-[480px] h-[100dvh] sm:h-[840px] sm:max-h-[calc(100dvh-2rem)] sm:my-4 flex flex-col bg-white sm:rounded-2xl sm:shadow-sm sm:border sm:border-[#E2E8F0] overflow-hidden relative">
+      <div className="w-full max-w-[480px] h-[100dvh] sm:h-[840px] sm:max-h-[calc(100dvh-2rem)] sm:my-4 flex flex-col bg-white sm:rounded-lg sm:shadow-sm sm:border sm:border-[#E2E8F0] overflow-hidden relative">
 
         {/* ─── Toast Flotante ─── */}
         {toastMessage && (
           <div className="absolute top-4 left-4 right-4 z-50 animate-fade-in pointer-events-none">
-            <div className="bg-[#0F172A] text-white px-5 py-4 rounded-2xl shadow-2xl flex items-center justify-between gap-3 border border-white/10 pointer-events-auto">
+            <div className="bg-[#0F172A] text-white px-5 py-4 rounded-lg shadow-2xl flex items-center justify-between gap-3 border border-white/10 pointer-events-auto">
               <p className="text-xs sm:text-sm text-[#F1F5F9] font-medium leading-relaxed">{toastMessage}</p>
               <button
                 type="button"
@@ -172,12 +172,12 @@ export default function Conductor() {
         {/* ─── Header Principal ─── */}
         <header className="px-5 pt-4 pb-3.5 bg-white border-b border-[#E2E8F0] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-sm text-white select-none shrink-0 shadow-sm bg-gradient-to-tr from-[#D97706] to-[#F59E0B]">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm text-white select-none shrink-0 shadow-sm bg-gradient-to-tr from-[#D97706] to-[#F59E0B]">
               CP
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold text-[#64748B] leading-none truncate">Panel Conductor</p>
-              <p className="text-sm sm:text-base font-bold text-[#0F172A] mt-0.5 truncate">Carlos Pérez</p>
+              <p className="text-sm sm:var(--muted)ase font-bold text-[#0F172A] mt-0.5 truncate">Carlos Pérez</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export default function Conductor() {
               type="button"
               id="btn-logout-conductor"
               onClick={() => navigate('/login')}
-              className="h-10 px-3.5 sm:px-4 rounded-2xl text-xs font-bold text-[#92400E] bg-[#FFFBEB] border border-[#FDE68A] hover:bg-[#FEF3C7] hover:text-[#78350F] hover:border-[#FCD34D] transition-all cursor-pointer flex items-center gap-2 shadow-xs shrink-0 whitespace-nowrap active:scale-95"
+              className="h-10 px-3.5 sm:px-4 rounded-lg text-xs font-bold text-[#92400E] bg-[#FFFBEB] border border-[#FDE68A] hover:bg-[#FEF3C7] hover:text-[#78350F] hover:border-[#FCD34D] transition-all cursor-pointer flex items-center gap-2 shadow-xs shrink-0 whitespace-nowrap active:scale-95"
               title="Cerrar sesión"
             >
               <div className="w-5 h-5 rounded-lg bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0">
@@ -203,13 +203,13 @@ export default function Conductor() {
           <div className="px-4 sm:px-5 py-4 space-y-4">
 
             {/* ── Consola Principal del Conductor y Furgón ── */}
-            <div className="bg-white border border-[#CBD5E1] rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3.5">
+            <div className="bg-white border border-[#CBD5E1] rounded-lg p-4 sm:p-5 shadow-2xs space-y-3.5">
               {/* Encabezado del vehículo y acceso a Modo Viaje */}
               <div className="flex items-center justify-between gap-2 border-b border-[#E2E8F0] pb-3 flex-wrap">
                 <div>
                   <p className="text-xs font-bold text-[#64748B] tracking-wider uppercase">Furgón Asignado</p>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <h2 className="text-base font-black text-[#0F172A]">Los Robles</h2>
+                    <h2 className="var(--muted)ase font-black text-[#0F172A]">Los Robles</h2>
                     <span className="text-xs font-mono font-black text-[#1E293B] bg-[#F1F5F9] border border-[#CBD5E1] px-2 py-0.5 rounded-md shadow-2xs">
                       ABCD-12
                     </span>
@@ -442,8 +442,8 @@ export default function Conductor() {
                 {/* Tarjetas de Alumnos con Espaciado Ergonómico (space-y-4 = 16px) */}
                 <div className="space-y-4">
                   {filteredStudents.length === 0 ? (
-                    <div className="bg-white border border-[#E2E8F0] rounded-2xl py-12 px-4 text-center">
-                      <div className="w-12 h-12 rounded-2xl bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A] flex items-center justify-center mx-auto mb-3">
+                    <div className="bg-white border border-[#E2E8F0] rounded-lg py-12 px-4 text-center">
+                      <div className="w-12 h-12 rounded-lg bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A] flex items-center justify-center mx-auto mb-3">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
@@ -513,20 +513,20 @@ export default function Conductor() {
                       return (
                         <div
                           key={student.id}
-                          className="bg-white border border-[#CBD5E1] rounded-2xl overflow-hidden shadow-2xs hover:border-[#94A3B8] transition-all"
+                          className="bg-white border border-[#CBD5E1] rounded-lg overflow-hidden shadow-2xs hover:border-[#94A3B8] transition-all"
                         >
                           {/* Cabecera del Alumno */}
                           <div className="p-4 sm:p-4.5 flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3 min-w-0">
                               <div
-                                className="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs"
+                                className="w-11 h-11 rounded-lg flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs"
                                 style={{ background: isAbsent ? '#94A3B8' : avatarColor }}
                               >
                                 {getInitials(student.name)}
                               </div>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <h3 className="text-sm sm:text-base font-black text-[#0F172A] truncate">
+                                  <h3 className="text-sm sm:var(--muted)ase font-black text-[#0F172A] truncate">
                                     {student.name}
                                   </h3>
                                   {student.id === 'martin' && (
@@ -725,7 +725,7 @@ export default function Conductor() {
                         En vivo
                       </span>
                     </div>
-                    <h3 className="text-base sm:text-lg font-black text-[#0F172A] mt-0.5">Ruta optimizada</h3>
+                    <h3 className="var(--muted)ase sm:text-lg font-black text-[#0F172A] mt-0.5">Ruta optimizada</h3>
                   </div>
 
                   {/* El ÚNICO botón para activar Modo Viaje */}
@@ -733,7 +733,7 @@ export default function Conductor() {
                     type="button"
                     id="btn-abrir-modo-viaje"
                     onClick={() => setIsDriveMode(true)}
-                    className="h-10 px-4 rounded-2xl bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer active:scale-95 transition-all shrink-0"
+                    className="h-10 px-4 rounded-lg bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer active:scale-95 transition-all shrink-0"
                     title="Navegación en pantalla completa para el volante"
                   >
                     <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
@@ -746,7 +746,7 @@ export default function Conductor() {
                 </div>
 
                 {/* Mapa interactivo */}
-                <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)] bg-[#F8FAFC]">
+                <div className="relative w-full h-[360px] sm:h-[420px] rounded-lg sm:rounded-lg overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)] bg-[#F8FAFC]">
                   {!isDriveMode && (
                     <RouteMap
                       busPosition={currentBusLocation}
@@ -759,7 +759,7 @@ export default function Conductor() {
                 </div>
 
                 {/* Orden sugerido de paradas */}
-                <div className="bg-white border border-[#CBD5E1] rounded-2xl overflow-hidden shadow-2xs">
+                <div className="bg-white border border-[#CBD5E1] rounded-lg overflow-hidden shadow-2xs">
                   <div className="px-5 py-3 border-b border-[#F1F5F9] bg-[#F8FAFC] flex items-center justify-between">
                     <p className="text-xs font-bold text-[#475569] uppercase tracking-wider">Secuencia de paradas sugerida</p>
                     <span className="text-xs text-[#64748B] font-semibold">{optimalStops.length} paradas</span>
@@ -841,7 +841,7 @@ export default function Conductor() {
                 type="button"
                 id="btn-salir-modo-viaje"
                 onClick={() => setIsDriveMode(false)}
-                className="h-10 px-3.5 sm:px-4 rounded-2xl text-xs sm:text-sm font-bold text-[#92400E] bg-[#FFFBEB] hover:bg-[#FEF3C7] hover:text-[#78350F] border border-[#FDE68A] shadow-md flex items-center gap-2 cursor-pointer pointer-events-auto active:scale-95 transition-all"
+                className="h-10 px-3.5 sm:px-4 rounded-lg text-xs sm:text-sm font-bold text-[#92400E] bg-[#FFFBEB] hover:bg-[#FEF3C7] hover:text-[#78350F] border border-[#FDE68A] shadow-md flex items-center gap-2 cursor-pointer pointer-events-auto active:scale-95 transition-all"
                 title="Volver a la vista regular"
               >
                 <div className="w-5 h-5 rounded-lg bg-[#FEF3C7] flex items-center justify-center text-[#D97706] shrink-0">
@@ -852,7 +852,7 @@ export default function Conductor() {
                 <span>Salir</span>
               </button>
 
-              <div className="bg-[#0F172A]/90 backdrop-blur-md px-3 sm:px-4 py-1.5 rounded-2xl border border-white/10 shadow-lg flex items-center gap-2 pointer-events-auto">
+              <div className="bg-[#0F172A]/90 backdrop-blur-md px-3 sm:px-4 py-1.5 rounded-lg border border-white/10 shadow-lg flex items-center gap-2 pointer-events-auto">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E] animate-ping shrink-0" />
                 <div className="text-left">
                   <p className="text-[10px] font-bold text-[#E8A118] uppercase tracking-wider leading-none">Modo Conducción</p>
@@ -867,7 +867,7 @@ export default function Conductor() {
                   setMapCenterPosition({ lat: currentBusLocation.lat, lng: currentBusLocation.lng, zoom: 16, time: Date.now() });
                   showToast('Cámara centrada en el furgón escolar.');
                 }}
-                className="h-10 px-3 sm:px-3.5 rounded-2xl bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 cursor-pointer pointer-events-auto active:scale-95 transition-all"
+                className="h-10 px-3 sm:px-3.5 rounded-lg bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5 cursor-pointer pointer-events-auto active:scale-95 transition-all"
                 title="Centrar en el furgón"
               >
                 <div className="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
@@ -907,7 +907,7 @@ export default function Conductor() {
                         {getDistanceKm(currentBusLocation.lat, currentBusLocation.lng, nextStop.lat, nextStop.lng)} km restantes
                       </span>
                     </div>
-                    <h3 className="text-base sm:text-lg font-black text-[#0F172A] mt-1 truncate">
+                    <h3 className="var(--muted)ase sm:text-lg font-black text-[#0F172A] mt-1 truncate">
                       {nextStop.name}
                     </h3>
                     <p className="text-xs text-[#64748B] truncate">{nextStop.address}</p>
@@ -959,7 +959,7 @@ export default function Conductor() {
                   return (
                     <div
                       key={stop.id}
-                      className={`p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
+                      className={`p-3 rounded-lg border transition-all flex items-center justify-between gap-3 ${
                         isCurrent
                           ? 'bg-[#FFFBEB] border-[#FDE68A] ring-2 ring-[#E8A118]/30 shadow-xs'
                           : isDone
@@ -1036,10 +1036,10 @@ export default function Conductor() {
 
         {/* ─── Modal: Finalizar recorrido con PIN de seguridad ─── */}
         {showCloseModal && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="w-full max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl animate-fade-in border border-[#E2E8F0]">
+          <div className="absolute inset-0 var(--amber)lack/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-sm bg-white rounded-lg overflow-hidden shadow-2xl animate-fade-in border border-[#E2E8F0]">
               <div className="px-6 pt-6 pb-4 border-b border-[#E2E8F0]">
-                <h3 className="text-base sm:text-lg font-bold text-[#0F172A]">Finalizar recorrido oficial</h3>
+                <h3 className="var(--muted)ase sm:text-lg font-bold text-[#0F172A]">Finalizar recorrido oficial</h3>
                 <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
                   Al confirmar, se detendrá la transmisión GPS del furgón y se notificará a los apoderados del cierre de la ruta.
                 </p>
@@ -1054,7 +1054,7 @@ export default function Conductor() {
                     onChange={(e) => { setInputCloseCode(e.target.value); setCloseError(''); }}
                     placeholder="••••"
                     maxLength={4}
-                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold text-2xl tracking-widest text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold var(--ink)xl tracking-widest text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
                   />
                   {closeError && <p className="text-xs font-semibold text-[#DC2626]">{closeError}</p>}
                   <p className="text-[11px] text-[#94A3B8] text-center font-medium">PIN de prueba: 1234</p>

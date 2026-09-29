@@ -30,8 +30,8 @@ function createBusIcon() {
     className: 'bus-marker',
     html: `
       <div style="position:relative; width:44px; height:44px; display:flex; align-items:center; justify-content:center;">
-        <div style="position:absolute; inset:0; border-radius:50%; background:rgba(232,161,24,0.3); animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
-        <div style="width:38px; height:38px; border-radius:50%; background:#E8A118; border:3px solid #FFFFFF; box-shadow:0 4px 12px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; color:white; z-index:2;">
+        <div style="position:absolute; inset:0; border-radius:50%; background:rgba(47,107,24,0.15); animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+        <div style="width:38px; height:38px; border-radius:50%; background:var(--amber); border:3px solid var(--card); box-shadow:0 4px 12px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--ink); z-index:2;">
           🚌
         </div>
       </div>
@@ -47,7 +47,7 @@ function createStopIcon(type, id, isHighlighted = false) {
     return L.divIcon({
       className: 'stop-marker',
       html: `
-        <div style="width:34px; height:34px; border-radius:50%; background:#DC2626; border:3px solid #FFFFFF; box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-size:16px;">
+        <div style="width:34px; height:34px; border-radius:50%; background:var(--red); border:3px solid var(--card); box-shadow:0 3px 10px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; font-size:16px;">
           🏫
         </div>
       `,
@@ -63,7 +63,7 @@ function createStopIcon(type, id, isHighlighted = false) {
       html: `
         <div style="position:relative; width:38px; height:38px; display:flex; align-items:center; justify-content:center;">
           <div style="position:absolute; inset:0; border-radius:50%; background:rgba(22,163,74,0.35); animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
-          <div style="width:32px; height:32px; border-radius:50%; background:#16A34A; border:3px solid #FFFFFF; box-shadow:0 4px 12px rgba(22,163,74,0.4); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:14px; font-weight:900; z-index:2;">
+          <div style="width:32px; height:32px; border-radius:50%; background:var(--green-deep); border:3px solid var(--card); box-shadow:0 4px 12px rgba(22,163,74,0.4); display:flex; align-items:center; justify-content:center; color:var(--card); font-size:14px; font-weight:900; z-index:2;">
             ★
           </div>
         </div>
@@ -77,7 +77,7 @@ function createStopIcon(type, id, isHighlighted = false) {
   return L.divIcon({
     className: 'stop-marker',
     html: `
-      <div style="width:28px; height:28px; border-radius:50%; background:#0F172A; border:2.5px solid #FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; color:#FFFFFF; font-size:12px; font-weight:800; font-family:sans-serif;">
+      <div style="width:28px; height:28px; border-radius:50%; background:var(--ink); border:2.5px solid var(--card); box-shadow:0 3px 8px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center; color:var(--card); font-size:12px; font-weight:800; font-family:sans-serif;">
         ${id || '•'}
       </div>
     `,
@@ -146,10 +146,10 @@ export default function RouteMap({
               : layerPosition === 'below-header'
               ? 'top-14 right-3'
               : 'top-3 right-3'
-          } z-[900] flex items-center bg-white/95 backdrop-blur-md rounded-2xl p-1 shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-[#FDE68A] text-xs font-bold text-[#64748B] transition-all`}
+          } z-[900] flex items-center bg-cream backdrop-blur-md rounded-lg p-1 shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-amber text-xs font-bold text-muted transition-all`}
         >
-          <div className="w-5 h-5 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center shrink-0 ml-0.5 mr-1" title="Capas de mapa">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-4 h-4 rounded-lg bg-card text-amber flex items-center justify-center shrink-0 ml-0.5 mr-1" title="Capas de mapa">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
             </svg>
           </div>
@@ -159,8 +159,8 @@ export default function RouteMap({
             onClick={() => setMapType('google')}
             className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer font-bold ${
               mapType === 'google'
-                ? 'bg-gradient-to-r from-[#D97706] to-[#E8A118] text-white shadow-xs font-black'
-                : 'text-[#64748B] hover:text-[#92400E] hover:bg-[#FEF3C7]/60'
+                ? 'bg-gradient-to-r from-amber to-orange-500 text-card shadow-xs font-black'
+                : 'text-muted hover:text-amber hover:bg-cream/60'
             }`}
           >
             Calles
@@ -171,8 +171,8 @@ export default function RouteMap({
             onClick={() => setMapType('satellite')}
             className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer font-bold ${
               mapType === 'satellite'
-                ? 'bg-gradient-to-r from-[#1E293B] to-[#0F172A] text-white shadow-xs font-black'
-                : 'text-[#64748B] hover:text-[#92400E] hover:bg-[#FEF3C7]/60'
+                ? 'bg-gradient-to-r from-gray-800 to-gray-950 text-card shadow-xs font-black'
+                : 'text-muted hover:text-amber hover:bg-cream/60'
             }`}
           >
             Satélite
@@ -188,7 +188,7 @@ export default function RouteMap({
         zoomControl={interactive}
         attributionControl={true}
         className="w-full h-full rounded-none"
-        style={{ background: '#f0f3f6' }}
+        style={{ background: '#F6F8F2' }}
       >
         {/* Capas de mapas en alta resolución */}
         {mapType === 'google' && (
@@ -216,18 +216,18 @@ export default function RouteMap({
             <Polyline
               positions={routePath}
               pathOptions={{
-                color: '#0F172A',
+                color: '#000000',
                 weight: 8,
                 opacity: 0.18,
                 lineCap: 'round',
                 lineJoin: 'round',
               }}
             />
-            {/* Línea principal de ruta - Amarillo ámbar institucional */}
+            {/* Línea principal de ruta - Ámbar institucional */}
             <Polyline
               positions={routePath}
               pathOptions={{
-                color: mapType === 'satellite' ? '#FACC15' : '#E8A118',
+                color: mapType === 'satellite' ? 'var(--amber)' : 'var(--amber)',
                 weight: 5,
                 opacity: 0.95,
                 lineCap: 'round',
@@ -253,12 +253,12 @@ export default function RouteMap({
               >
                 <Popup>
                   {isHighlighted && (
-                    <div className="inline-block text-[11px] font-bold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded-md mb-1.5">
+                    <div className="inline-block text-[11px] font-bold text-green-deep bg-cream px-2 py-0.5 rounded-md mb-1.5">
                       ★ Tu parada asignada
                     </div>
                   )}
-                  <div className="font-bold text-[13px] text-[#0F172A]">{stop.name}</div>
-                  <div className="text-[11px] text-[#64748B] mt-0.5">
+                  <div className="font-bold text-[13px] text-ink">{stop.name}</div>
+                  <div className="text-[11px] text-muted mt-0.5">
                     {stop.type === 'school' ? '🏫 Establecimiento educacional' : `📍 Parada ${stop.id}: ${stop.address}`}
                   </div>
                 </Popup>
@@ -273,8 +273,8 @@ export default function RouteMap({
             icon={createBusIcon()}
           >
             <Popup>
-              <div className="font-bold text-[13px] text-[#0F172A]">🚌 Furgón Los Robles</div>
-              <div className="text-[11px] text-[#22C55E] font-medium mt-0.5">● Transmisión GPS en vivo</div>
+              <div className="font-bold text-[13px] text-ink">🚌 Furgón Los Robles</div>
+              <div className="text-[11px] text-green-deep font-medium mt-0.5">● Transmisión GPS en vivo</div>
             </Popup>
           </Marker>
         )}

@@ -1,99 +1,138 @@
-"""
-estudiante_dao.py — Data Access Object (DAO) para la entidad Estudiante.
-Cumplimiento estricto de RNF-03: 100% de consultas SQL aisladas en esta clase.
-
-Requisitos Funcionales cubiertos:
-- RF-03 (HU-03): Registro de Subida -> El estado del escolar cambia a 'en_viaje'.
-- RF-04 (HU-04): Registro de Bajada -> El estado del escolar cambia a 'entregado'.
+﻿"""
+estudiante_dao.py - DAO para Escolares conectado a Supabase.
+Schema real escolares: id, nombre_completo, direccion_hogar, grado, parada_id, id_apoderado, asiste_hoy, estado_actual, hora_subida, hora_bajada, codigo_retiro
+Schema real asistencia: id_registro, id_viaje, id_escolar, hora_subida, hora_bajada
+RF-03: Registro de Subida. RF-04: Registro de Bajada.
 """
 
-from typing import List, Optional
-from database import get_connection
-from models import Estudiante
+from typing import Optional, List
+from database import get_supabase
+
 
 class EstudianteDAO:
+
     @staticmethod
     def obtener_todos() -> List[dict]:
-        """Obtiene la lista completa de escolares con su estado actual."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM estudiantes ORDER BY nombre ASC;")
-        rows = cursor.fetchall()
-        conn.close()
-        return [dict(row) for row in rows]
+        """Retorna todos los escolares desde Supabase."""
+        sb = get_supabase()
+        res = sb.table("escolares").select("*").order("parada_id").execute()
+        return res.data or []
+
+    @staticmethod
+    def obtener_por_apoderado(id_apoderado: str) -> List[dict]:
+        """Retorna solo los escolares de un apoderado especifico."""
+        sb = get_supabase()
+        res = sb.table("escolares").select("*").eq("id_apoderado", id_apoderado).execute()
+        return res.data or []
 
     @staticmethod
     def obtener_por_id(estudiante_id: str) -> Optional[dict]:
-        """Busca un estudiante por su identificador único."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM estudiantes WHERE id = ?;", (estudiante_id,))
-        row = cursor.fetchone()
-        conn.close()
-        return dict(row) if row else None
+        """Obtiene un escolar por su UUID."""
+        sb = get_supabase()
+        res = sb.table("escolares").select("*").eq("id", estudiante_id).execute()
+        return res.data[0] if res.data else None
 
     @staticmethod
-    def registrar_subida(estudiante_id: str, hora_actual: str) -> bool:
-        """
-        RF-03 (HU-03): Registro de Subida en tiempo real.
-        El estado del escolar cambia a 'en_viaje' en la BD con su hora exacta.
-        """
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE estudiantes 
-            SET estado_viaje = 'en_viaje', hora_subida = ?
-            WHERE id = ?;
-        """, (hora_actual, estudiante_id))
-        filas_afectadas = cursor.rowcount
-        conn.commit()
-        conn.close()
-        return filas_afectadas > 0
+    def crear_estudiante(nombre: str, direccion: str, grado: str,
+                         id_apoderado: str, parada_id: int = 1) -> dict:
+        """Registra un nuevo escolar vinculado a su apoderado."""
+        sb = get_supabase()
+        res = sb.table("escolares").insert({
+            "nombre_completo": nombre,
+            "direccion_hogar": direccion,
+            "grado": grado,
+            "parada_id": parada_id,
+            "id_apoderado": id_apoderado,
+            "estado_actual": "esperando",
+            "asiste_hoy": True,
+            "codigo_retiro": "8429"
+        }).execute()
+        return res.data[0] if res.data else {}
 
     @staticmethod
-    def registrar_bajada(estudiante_id: str, hora_actual: str) -> bool:
-        """
-        RF-04 (HU-04): Registro de Bajada en tiempo real.
-        El estado del escolar cambia a 'entregado' en la BD con su hora exacta.
-        """
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE estudiantes 
-            SET estado_viaje = 'entregado', hora_bajada = ?
-            WHERE id = ?;
-        """, (hora_actual, estudiante_id))
-        filas_afectadas = cursor.rowcount
-        conn.commit()
-        conn.close()
-        return filas_afectadas > 0
+    def registrar_subida(estudiante_id: str, hora: str) -> bool:
+        """RF-03: Marca al escolar como en_viaje y registra hora de subida."""
+        sb = get_supabase()
+        res = sb.table("escolares").update({
+            "estado_actual": "en_viaje",
+            "hora_subida": hora
+        }).eq("id", estudiante_id).execute()
+
+        # Registrar en tabla asistencia - obtener viaje activo primero
+        try:
+            viaje_activo = sb.table("viajes").select("id_viaje").eq("estado", "en_curso").limit(1).execute()
+            if viaje_activo.data:
+                id_viaje = viaje_activo.data[0]["id_viaje"]
+                # Upsert: si ya existe registro para este escolar en este viaje, actualizar
+                existe = sb.table("asistencia").select("id_registro").eq("id_escolar", estudiante_id).eq("id_viaje", id_viaje).execute()
+                if existe.data:
+                    sb.table("asistencia").update({"hora_subida": hora}).eq("id_registro", existe.data[0]["id_registro"]).execute()
+                else:
+                    sb.table("asistencia").insert({
+                        "id_viaje": id_viaje,
+                        "id_escolar": estudiante_id,
+                        "hora_subida": hora
+                    }).execute()
+        except Exception as e:
+            print(f"[WARN] No se pudo registrar asistencia subida: {e}")
+
+        return len(res.data) > 0
 
     @staticmethod
-    def confirmar_asistencia(estudiante_id: str, asiste: bool) -> bool:
-        """Confirmación de asistencia por parte del apoderado (Asiste / No asiste)."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE estudiantes 
-            SET asiste_hoy = ?
-            WHERE id = ?;
-        """, (1 if asiste else 0, estudiante_id))
-        filas_afectadas = cursor.rowcount
-        conn.commit()
-        conn.close()
-        return filas_afectadas > 0
+    def registrar_bajada(estudiante_id: str, hora: str) -> bool:
+        """RF-04: Marca al escolar como entregado y registra hora de bajada."""
+        sb = get_supabase()
+        res = sb.table("escolares").update({
+            "estado_actual": "entregado",
+            "hora_bajada": hora
+        }).eq("id", estudiante_id).execute()
+
+        # Registrar en tabla asistencia
+        try:
+            viaje_activo = sb.table("viajes").select("id_viaje").eq("estado", "en_curso").limit(1).execute()
+            if viaje_activo.data:
+                id_viaje = viaje_activo.data[0]["id_viaje"]
+                existe = sb.table("asistencia").select("id_registro").eq("id_escolar", estudiante_id).eq("id_viaje", id_viaje).execute()
+                if existe.data:
+                    sb.table("asistencia").update({"hora_bajada": hora}).eq("id_registro", existe.data[0]["id_registro"]).execute()
+                else:
+                    sb.table("asistencia").insert({
+                        "id_viaje": id_viaje,
+                        "id_escolar": estudiante_id,
+                        "hora_bajada": hora
+                    }).execute()
+        except Exception as e:
+            print(f"[WARN] No se pudo registrar asistencia bajada: {e}")
+
+        return len(res.data) > 0
 
     @staticmethod
-    def actualizar_codigo_retiro(estudiante_id: str, nuevo_codigo: str) -> bool:
-        """Actualiza el código de seguridad de retiro generado por el apoderado."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE estudiantes 
-            SET codigo_retiro = ?
-            WHERE id = ?;
-        """, (nuevo_codigo, estudiante_id))
-        filas_afectadas = cursor.rowcount
-        conn.commit()
-        conn.close()
-        return filas_afectadas > 0
+    def marcar_no_asiste(estudiante_id: str) -> bool:
+        """Marca que el escolar no asiste hoy."""
+        sb = get_supabase()
+        res = sb.table("escolares").update({
+            "asiste_hoy": False,
+            "estado_actual": "no_asiste"
+        }).eq("id", estudiante_id).execute()
+        return len(res.data) > 0
+
+    @staticmethod
+    def confirmar_recepcion(estudiante_id: str) -> bool:
+        """Confirma que el apoderado recibio al escolar."""
+        sb = get_supabase()
+        res = sb.table("escolares").update({
+            "estado_actual": "recibido"
+        }).eq("id", estudiante_id).execute()
+        return len(res.data) > 0
+
+    @staticmethod
+    def resetear_dia() -> bool:
+        """Reinicia los estados diarios de todos los escolares para un nuevo dia."""
+        sb = get_supabase()
+        res = sb.table("escolares").update({
+            "estado_actual": "esperando",
+            "asiste_hoy": True,
+            "hora_subida": None,
+            "hora_bajada": None
+        }).neq("id", "").execute()
+        return len(res.data) > 0

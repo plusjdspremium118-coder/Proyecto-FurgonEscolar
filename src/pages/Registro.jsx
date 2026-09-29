@@ -1,6 +1,6 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { validateEmail, validatePassword, buildSafePayload } from '../utils/validation';
+import { validateEmail, validatePassword } from '../utils/validation';
 import { useTransportState } from '../data/useTransportState';
 
 export default function Registro() {
@@ -18,12 +18,15 @@ export default function Registro() {
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    if (serverError) setServerError('');
   }
 
   function validate() {
@@ -46,7 +49,7 @@ export default function Registro() {
     return next;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -54,6 +57,48 @@ export default function Registro() {
       return;
     }
 
+    setLoading(true);
+    setServerError('');
+
+    try {
+      const response = await fetch('http://localhost:8000/api/auth/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          correo: form.email,
+          contrasena: form.password,
+          nombre: form.nombre,
+          rol: form.role,
+          telefono_emergencia: '+56 9 8765 4321',
+          studentName: form.studentName || null,
+          studentGrade: form.studentGrade || null,
+          studentStop: form.studentStop || null
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Error del servidor (ej: correo ya registrado)
+        setServerError(data.detail || 'Error al crear la cuenta. Intenta de nuevo.');
+        setLoading(false);
+        return;
+      }
+
+      // Guardar sesión
+      if (data.usuario?.csrf_token) {
+        sessionStorage.setItem('rutasegura_csrf_token', data.usuario.csrf_token);
+        sessionStorage.setItem('rutasegura_user', JSON.stringify(data.usuario));
+      }
+
+    } catch (err) {
+      // Backend offline
+      setServerError('No se pudo conectar al servidor. Asegúrate de que el backend esté corriendo en http://localhost:8000');
+      setLoading(false);
+      return;
+    }
+
+    // Registro local para estado de UI
     if (form.role === 'apoderado') {
       registerApoderadoWithStudent({
         parentName: form.nombre,
@@ -64,217 +109,214 @@ export default function Registro() {
       });
     }
 
-    const payload = buildSafePayload(form);
-    console.log('Registro exitoso:', payload);
+    setLoading(false);
     setSubmitted(true);
     setTimeout(() => {
       if (form.role === 'apoderado') navigate('/apoderado');
       else navigate('/conductor');
-    }, 1200);
+    }, 1500);
   }
 
   return (
-    <div className="relative min-h-dvh w-full flex items-center justify-center px-4 py-8 sm:py-12 overflow-x-hidden">
-      {/* Imagen de fondo temática de transporte escolar */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat fixed transform scale-105"
-        style={{ backgroundImage: "url('/login-bg.jpg')" }}
-      />
-      {/* Capa de superposición con gradiente suave para garantizar perfecta legibilidad y contraste */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/50 to-[#0F172A]/75 backdrop-blur-[2px]" />
-
-      {/* Tarjeta principal de registro con efecto glassmorphism */}
-      <div className="relative z-10 w-full max-w-[460px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/60 overflow-hidden my-auto">
-
-        {/* Cabecera */}
-        <div className="px-6 sm:px-8 pt-8 sm:pt-9 pb-6 border-b border-[#E2E8F0]/80">
-          <div className="flex items-center gap-3.5">
-            <img
-              src="/app-icon.png"
-              alt="RutaSegura"
-              className="w-13 h-13 rounded-2xl shadow-md border border-[#FDE68A] shrink-0 object-cover"
-            />
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight">
-                Crear cuenta
-              </h1>
-              <p className="text-xs sm:text-sm font-semibold text-[#64748B]">
-                RutaSegura · Registro de nuevo usuario
-              </p>
-            </div>
+    <div className="login-wrapper">
+      <div className="login-card">
+        <div className="login-header">
+          <div className="login-badge-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 19h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+              <circle cx="9" cy="19" r="1.5" fill="currentColor" />
+              <circle cx="15" cy="19" r="1.5" fill="currentColor" />
+              <path d="M9 5v4M15 5v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </div>
+          <h1 className="login-brand-title">RutaSegura</h1>
+          <span className="login-badge-subtitle">Transporte escolar</span>
+          <h2 className="login-welcome-title">Crear cuenta</h2>
+          <p className="login-desc">Regístrate para acceder al servicio</p>
         </div>
 
-        <div className="px-6 sm:px-8 py-6 sm:py-7">
+        <div className="register-form" style={{ paddingTop: '0' }}>
           {submitted ? (
-            <div className="py-10 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#F0FDF4] border border-[#BBF7D0] flex items-center justify-center mx-auto">
-                <svg className="w-6 h-6 text-[#16A34A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            <div className="register-success-view">
+              <div className="success-badge-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
               </div>
-              <p className="text-sm font-semibold text-[#0F172A]">Cuenta creada correctamente</p>
-              <p className="text-xs text-[#64748B]">
+              <h2>¡Cuenta creada!</h2>
+              <p className="success-message">
                 {form.role === 'apoderado'
-                  ? `Estudiante ${form.studentName || 'registrado'} vinculado exitosamente. Redirigiendo...`
-                  : 'Redirigiendo a tu panel...'}
+                  ? `Estudiante ${form.studentName || 'registrado'} vinculado exitosamente en Supabase. Redirigiendo...`
+                  : 'Cuenta registrada en Supabase. Redirigiendo a tu panel...'}
               </p>
+              <div className="success-details-card">
+                <span><strong>Nombre:</strong> {form.nombre}</span>
+                <span><strong>Email:</strong> {form.email}</span>
+                <span><strong>Rol:</strong> {form.role === 'apoderado' ? 'Apoderado' : 'Conductor'}</span>
+                {form.role === 'apoderado' && (
+                  <>
+                    <span><strong>Estudiante:</strong> {form.studentName}</span>
+                    <span><strong>Curso:</strong> {form.studentGrade}</span>
+                    <span><strong>Parada:</strong> {form.studentStop}</span>
+                  </>
+                )}
+              </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate>
 
-              {/* Selector de tipo de cuenta */}
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">
-                  Tipo de cuenta
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setForm((p) => ({ ...p, role: 'apoderado' }))}
-                    className={`min-h-[64px] py-2.5 px-3.5 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-center ${
-                      form.role === 'apoderado'
-                        ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
-                        : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
-                    }`}
-                  >
-                    <span className="block text-sm font-bold truncate">Apoderado</span>
-                    <span className="block text-xs text-[#94A3B8] font-semibold truncate mt-0.5">Monitorear a mi hijo</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setForm((p) => ({ ...p, role: 'conductor' }))}
-                    className={`min-h-[64px] py-2.5 px-3.5 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-center ${
-                      form.role === 'conductor'
-                        ? 'bg-[#FFFBEB] border-2 border-[#D97706] text-[#92400E] shadow-xs'
-                        : 'bg-white/80 border border-[#CBD5E1] text-[#64748B] hover:bg-[#F8FAFC]'
-                    }`}
-                  >
-                    <span className="block text-sm font-bold truncate">Conductor</span>
-                    <span className="block text-xs text-[#94A3B8] font-semibold truncate mt-0.5">Gestionar mi ruta</span>
-                  </button>
+              {serverError && (
+                <div className="login-error-box" style={{ marginBottom: '12px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <span>{serverError}</span>
                 </div>
+              )}
+
+              <div className="register-role-options" role="radiogroup" aria-label="Seleccionar tipo de cuenta">
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={form.role === 'apoderado'}
+                  onClick={() => setForm((p) => ({ ...p, role: 'apoderado' }))}
+                  className={`register-role-option ${form.role === 'apoderado' ? 'active' : ''}`}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  <span>
+                    <strong>Apoderado</strong>
+                    <small>Monitorear a mi hijo</small>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={form.role === 'conductor'}
+                  onClick={() => setForm((p) => ({ ...p, role: 'conductor' }))}
+                  className={`register-role-option ${form.role === 'conductor' ? 'active' : ''}`}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M8 19h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+                    <circle cx="10" cy="19" r="1.5" fill="currentColor" />
+                    <circle cx="14" cy="19" r="1.5" fill="currentColor" />
+                    <path d="M10 5v4M14 5v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                  <span>
+                    <strong>Conductor</strong>
+                    <small>Gestionar mi ruta</small>
+                  </span>
+                </button>
               </div>
 
-              {/* Nombre del apoderado/conductor */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-[#334155]">
-                  {form.role === 'apoderado' ? 'Nombre completo del apoderado' : 'Nombre completo'}
-                </label>
+              <div className="input-group">
+                <label htmlFor="reg-nombre">{form.role === 'apoderado' ? 'Nombre completo del apoderado' : 'Nombre completo'}</label>
                 <input
                   type="text"
                   name="nombre"
+                  id="reg-nombre"
                   value={form.nombre}
                   onChange={handleChange}
                   placeholder={form.role === 'apoderado' ? 'Ej. Sofía Reyes' : 'Ej. Carlos Pérez'}
-                  className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all placeholder:text-[#CBD5E1]"
+                  className={errors.nombre ? 'input-error' : ''}
+                  autoComplete="name"
                 />
-                {errors.nombre && (
-                  <p className="text-xs text-[#DC2626]">{errors.nombre}</p>
-                )}
+                {errors.nombre && <p className="error-text">{errors.nombre}</p>}
               </div>
 
-              {/* Email */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-[#334155]">
-                  Correo electrónico
-                </label>
+              <div className="input-group">
+                <label htmlFor="reg-email">Correo electrónico</label>
                 <input
                   type="email"
                   name="email"
+                  id="reg-email"
                   value={form.email}
                   onChange={handleChange}
                   placeholder="correo@ejemplo.cl"
-                  className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all placeholder:text-[#CBD5E1]"
+                  className={errors.email ? 'input-error' : ''}
+                  autoComplete="email"
                 />
-                {errors.email && (
-                  <p className="text-xs text-[#DC2626]">{errors.email}</p>
-                )}
+                {errors.email && <p className="error-text">{errors.email}</p>}
               </div>
 
-              {/* Contraseña */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-[#334155]">
-                  Contraseña
-                </label>
-                <div className="relative">
+              <div className="input-group">
+                <label htmlFor="reg-password">Contraseña</label>
+                <div style={{ position: 'relative' }}>
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
+                    id="reg-password"
                     value={form.password}
                     onChange={handleChange}
                     placeholder="Mínimo 8 caracteres"
-                    className="w-full pl-4 pr-11 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all placeholder:text-[#CBD5E1]"
+                    className={errors.password ? 'input-error' : ''}
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#475569] p-1 cursor-pointer transition-colors"
-                    title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                    style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
                   >
                     {showPassword ? (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-4.47 0-8.26-2.94-9.54-7a9.97 9.97 0 0 1 1.56-3.03m5.86.91a3 3 0 1 1 4.24 4.24M9.88 9.88l4.24 4.24M9.88 9.88l-3.29-3.29m7.53 7.53l3.29 3.29M3 3l18 18" />
                       </svg>
                     ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
                       </svg>
                     )}
                   </button>
                 </div>
-                {errors.password && (
-                  <p className="text-xs text-[#DC2626]">{errors.password}</p>
-                )}
+                {errors.password && <p className="error-text">{errors.password}</p>}
               </div>
 
-              {/* ─── Sección Alumno (Exclusiva para apoderados: Opción 1) ─── */}
               {form.role === 'apoderado' && (
-                <div className="pt-3 border-t border-[#F1F5F9] space-y-3.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#E8A118]" />
-                      <label className="block text-xs font-bold text-[#0F172A] uppercase tracking-wider">
+                <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #edf1e6' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'spaceBetween', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--green)' }} />
+                      <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Datos del Escolar / Pupilo
                       </label>
                     </div>
-                    <span className="text-[10px] font-bold text-[#92400E] bg-[#FFFBEB] border border-[#FDE68A] px-2 py-0.5 rounded-md">
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--green-deep)', background: 'var(--green-soft)', border: '1px solid #c2e2a8', padding: '2px 8px', borderRadius: '999px' }}>
                       Furgón Los Robles
                     </span>
                   </div>
 
-                  {/* Nombre del alumno */}
-                  <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-[#334155]">
-                      Nombre completo del estudiante
-                    </label>
+                  <div className="input-group">
+                    <label htmlFor="reg-student-name">Nombre completo del estudiante</label>
                     <input
                       type="text"
                       name="studentName"
-                      id="input-student-name"
+                      id="reg-student-name"
                       value={form.studentName}
                       onChange={handleChange}
                       placeholder="Ej. Martín Reyes"
-                      className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all placeholder:text-[#CBD5E1]"
+                      className={errors.studentName ? 'input-error' : ''}
                     />
-                    {errors.studentName && (
-                      <p className="text-xs text-[#DC2626]">{errors.studentName}</p>
-                    )}
+                    {errors.studentName && <p className="error-text">{errors.studentName}</p>}
                   </div>
 
-                  {/* Curso o Grado */}
-                  <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-[#334155]">
-                      Curso o Grado
-                    </label>
-                    <div className="relative">
+                  <div className="input-group">
+                    <label htmlFor="reg-student-grade">Curso o Grado</label>
+                    <div style={{ position: 'relative' }}>
                       <select
                         name="studentGrade"
-                        id="select-student-grade"
+                        id="reg-student-grade"
                         value={form.studentGrade}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl text-sm font-medium text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all appearance-none cursor-pointer"
+                        style={{ width: '100%', padding: '12px 40px 12px 14px', border: '1.5px solid #d4dccb', borderRadius: 'var(--radius-sm)', fontSize: '14px', fontFamily: 'inherit', background: '#fafbf8', color: 'var(--ink)', appearance: 'none', cursor: 'pointer' }}
                       >
                         <option value="1° Básico">1° Básico</option>
                         <option value="2° Básico">2° Básico</option>
@@ -287,31 +329,26 @@ export default function Registro() {
                         <option value="1° Medio">1° Medio</option>
                         <option value="2° Medio">2° Medio</option>
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-[#64748B]">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--muted)' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
                     </div>
                   </div>
 
-                  {/* Dirección de recogida / Domicilio manual */}
-                  <div className="space-y-1.5">
-                    <label className="block text-sm font-medium text-[#334155]">
-                      Dirección de recogida / Domicilio
-                    </label>
+                  <div className="input-group">
+                    <label htmlFor="reg-student-stop">Dirección de recogida / Domicilio</label>
                     <input
                       type="text"
                       name="studentStop"
-                      id="input-student-stop"
+                      id="reg-student-stop"
                       value={form.studentStop}
                       onChange={handleChange}
                       placeholder="Ej. Av. Providencia 1345, Dpto 402"
-                      className="w-full px-4 py-3 rounded-xl text-sm text-[#0F172A] bg-white border-2 border-[#E2E8F0] focus:border-[#E8A118] focus:outline-none transition-all placeholder:text-[#CBD5E1]"
+                      className={errors.studentStop ? 'input-error' : ''}
                     />
-                    {errors.studentStop && (
-                      <p className="text-xs text-[#DC2626]">{errors.studentStop}</p>
-                    )}
+                    {errors.studentStop && <p className="error-text">{errors.studentStop}</p>}
                   </div>
                 </div>
               )}
@@ -319,22 +356,19 @@ export default function Registro() {
               <button
                 type="submit"
                 id="btn-register-submit"
-                className="w-full py-3.5 rounded-xl text-sm font-bold text-white transition-all cursor-pointer mt-2 bg-gradient-to-r from-[#D97706] to-[#E8A118] hover:from-[#B45309] hover:to-[#D97706] shadow-md active:scale-95"
+                className="register-submit-btn"
+                disabled={loading}
+                style={{ opacity: loading ? 0.7 : 1 }}
               >
-                Crear cuenta
+                {loading ? 'Registrando en Supabase...' : 'Crear cuenta'}
               </button>
             </form>
           )}
-        </div>
 
-        {/* Pie */}
-        <div className="px-8 py-5 border-t border-[#E2E8F0] bg-[#F8FAFC]">
-          <p className="text-xs text-center text-[#94A3B8]">
-            ¿Ya tienes cuenta?{' '}
-            <Link to="/login" className="font-semibold text-[#E8A118] hover:underline">
-              Inicia sesión
-            </Link>
-          </p>
+          <div className="login-footer-links">
+            <p className="no-account-text">¿Ya tienes cuenta?</p>
+            <Link to="/login" className="register-link-btn">Inicia sesión</Link>
+          </div>
         </div>
       </div>
     </div>
