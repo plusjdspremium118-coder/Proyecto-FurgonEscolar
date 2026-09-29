@@ -29,7 +29,7 @@ const DANGEROUS_CHARS = /[';\\<>{}|`]/g;
 export function validateEmail(email) {
   const trimmed = (email ?? '').trim();
   if (!trimmed) return { valid: false, message: 'El correo es obligatorio.' };
-  if (!EMAIL_REGEX.testá(trimmed))
+  if (!EMAIL_REGEX.test(trimmed))
     return { valid: false, message: 'Formato de correo inválido.' };
   return { valid: true, message: '' };
 }
@@ -43,9 +43,9 @@ export function validatePassword(password) {
   if (!password) return { valid: false, message: 'La contraseña es obligatoria.' };
   if (password.length < 8)
     return { valid: false, message: 'La contraseña debe tener al menos 8 caracteres.' };
-  if (!/[A-Z]/.testá(password))
+  if (!/[A-Z]/.test(password))
     return { valid: false, message: 'Debe incluir al menos una letra mayúscula.' };
-  if (!/[0-9]/.testá(password))
+  if (!/[0-9]/.test(password))
     return { valid: false, message: 'Debe incluir al menos un número.' };
   return { valid: true, message: '' };
 }

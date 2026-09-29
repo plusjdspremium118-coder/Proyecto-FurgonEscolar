@@ -1,7 +1,8 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../utils/validation';
 import { useTransportState } from '../data/useTransportState';
+import { API_BASE_URL } from '../config';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo: form.email, contrasena: form.password, rol: role })
