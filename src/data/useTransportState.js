@@ -29,8 +29,8 @@ export function useTransportState() {
 
     const user = getUserSession();
     const apiUrl = (user && user.rol === 'apoderado' && user.id)
-      ? `${API}/api/estáudiantes/apoderado/${user.id}`
-      : `${API}/api/estáudiantes`;
+      ? `${API}/api/estudiantes/apoderado/${user.id}`
+      : `${API}/api/estudiantes`;
 
     fetch(apiUrl)
       .then((res) => res.json())
@@ -51,7 +51,7 @@ export function useTransportState() {
               ? st.nombre_completo.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
               : '??',
             avatar: index % 2 === 0 ? String.fromCodePoint(0x1F466) : String.fromCodePoint(0x1F467),
-            status: st.estáado_actual || 'esperando',
+            status: st.estado_actual || 'esperando',
             attending: st.asiste_hoy !== false,
             boardedAt: st.hora_subida || null,
             deliveredAt: st.hora_bajada || null,
@@ -100,7 +100,7 @@ export function useTransportState() {
       fetch(`${API}/api/asistencia/no-asiste`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estáudiante_id: studentId, hora: '' }),
+        body: JSON.stringify({ estudiante_id: studentId, hora: '' }),
       }).catch((err) => console.warn('[Supabase] toggleAttendance:', err));
     }
   }, []);
@@ -112,7 +112,7 @@ export function useTransportState() {
     fetch(`${API}/api/asistencia/subida`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ estáudiante_id: studentId, hora }),
+      body: JSON.stringify({ estudiante_id: studentId, hora }),
     }).catch((err) => console.warn('[Supabase] recordBoarding:', err));
   }, []);
 
@@ -123,7 +123,7 @@ export function useTransportState() {
     fetch(`${API}/api/asistencia/bajada`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ estáudiante_id: studentId, hora }),
+      body: JSON.stringify({ estudiante_id: studentId, hora }),
     }).catch((err) => console.warn('[Supabase] recordDropoff:', err));
   }, []);
 
@@ -148,7 +148,7 @@ export function useTransportState() {
     fetch(`${API}/api/asistencia/confirmar-recepcion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ estáudiante_id: studentId, hora: '' }),
+      body: JSON.stringify({ estudiante_id: studentId, hora: '' }),
     }).catch((err) => console.warn('[Supabase] confirmChildReceived:', err));
   }, []);
 

@@ -91,7 +91,7 @@ export default function Apoderado() {
 
   function handleUndoReceived() {
     undoChildReceived('martin');
-    showToast('Recepción restáablecida.');
+    showToast('Recepción restablecida.');
   }
 
   function showToast(msg) {
@@ -100,7 +100,7 @@ export default function Apoderado() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // LÓGICA DINÁMICA DE LA TARJETA HERO (Elimina contradicciones de estáado)
+  // LÓGICA DINÁMICA DE LA TARJETA HERO (Elimina contradicciones de estado)
   // ══════════════════════════════════════════════════════════════════════════
   function getHeroData() {
     if (!isRouteActive) {
@@ -177,7 +177,7 @@ export default function Apoderado() {
 
     if (childStatus === 'a_bordo' || childStatus === 'en_viaje') {
       return {
-        title: `${studentFirstName} estáá a bordo del furgón`,
+        title: `${studentFirstName} está a bordo del furgón`,
         subtitle: `En trayecto hacia el colegio · Conductor: Carlos Pérez (Furgón Los Robles)`,
         badge: 'A bordo · En viaje',
         badgeClass: 'bg-white/20 text-white border-white/25',
@@ -228,7 +228,7 @@ export default function Apoderado() {
       case 'esperando': return {
         label: 'Esperando',
         color: '#92400E', bg: '#FFFBEB', border: '#FDE68A',
-        desc: 'El furgón estáá en camino a la parada o domicilio.',
+        desc: 'El furgón está en camino a la parada o domicilio.',
       };
       case 'entregado': return {
         label: 'Entregado en parada',
@@ -389,10 +389,10 @@ export default function Apoderado() {
           {activeTab === 'inicio' && (
             <div className="flex flex-col gap-5 sm:gap-6 pb-4 pt-1">
 
-              {/* 1. TARJETA HERO DINÁMICA: Sincronizada 100% con el estáado real */}
+              {/* 1. TARJETA HERO DINÁMICA: Sincronizada 100% con el estado real */}
               <div className={`rounded-3xl shadow-md p-6 sm:p-7 text-white bg-gradient-to-br ${hero.gradientClass} transition-all`}>
                 <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-                  <span className="text-xs font-extrabold text-white/90 uppercase tracking-widestá leading-normal">
+                  <span className="text-xs font-extrabold text-white/90 uppercase tracking-widest leading-normal">
                     Seguimiento en vivo
                   </span>
                   <span className={`px-3.5 py-1 rounded-full text-xs font-bold border backdrop-blur-md ${hero.badgeClass} shrink-0 shadow-xs leading-normal`}>
@@ -581,7 +581,7 @@ export default function Apoderado() {
                   {childStatus === 'esperando' && (
                     <div className="px-4 py-3.5 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] flex items-center gap-3 text-xs sm:text-sm text-[#92400E]">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#D97706] shrink-0 animate-pulse" />
-                      <span>Esperando recogida · Recibirás un aviso en tu teléfono cuando el furgón estáé a 500 metros.</span>
+                      <span>Esperando recogida · Recibirás un aviso en tu teléfono cuando el furgón esté a 500 metros.</span>
                     </div>
                   )}
 
@@ -591,7 +591,7 @@ export default function Apoderado() {
                       <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] animate-pulse shrink-0" />
                       <div className="min-w-0">
                         <p className="text-xs sm:text-sm font-bold text-[#1E40AF]">
-                          {studentFirstName} estáá a bordo y seguro en el transporte
+                          {studentFirstName} está a bordo y seguro en el transporte
                         </p>
                         <p className="text-xs text-[#3B82F6] mt-0.5 leading-relaxed">
                           Podrás confirmar la recepción apenas el furgón llegue a tu parada o domicilio.
@@ -761,7 +761,7 @@ export default function Apoderado() {
 
               {/* Contenedor moderno del mapa Leaflet con bordes suaves y sombra sutil */}
               <div className="relative w-full h-[360px] sm:h-[420px] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(0,0,0,0.08)] bg-[#F8FAFC]">
-                {/* Overlay flotante superior con estáado del recorrido */}
+                {/* Overlay flotante superior con estado del recorrido */}
                 <div className="absolute top-3 left-3 right-3 z-400 flex items-center justify-between gap-2 pointer-events-none">
                   <div className="bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-md border border-[#E2E8F0] flex items-center gap-2.5 max-w-[85%] pointer-events-auto">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#22C55E] animate-ping shrink-0" />
@@ -792,7 +792,7 @@ export default function Apoderado() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  {/* Card 1: Parada del estáudiante */}
+                  {/* Card 1: Parada del estudiante */}
                   <div className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] transition-all rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex items-start gap-3.5">
                     <div className="w-10 h-10 rounded-xl bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                       <svg className="w-5 h-5 text-[#D97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -801,7 +801,7 @@ export default function Apoderado() {
                       </svg>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold text-[#64748B]">Parada del estáudiante</p>
+                      <p className="text-xs font-semibold text-[#64748B]">Parada del estudiante</p>
                       <p className="text-sm font-bold text-[#1E293B] mt-0.5 break-words leading-snug">
                         {studentAssignedStop}
                       </p>

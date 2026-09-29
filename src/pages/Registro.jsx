@@ -39,7 +39,7 @@ export default function Registro() {
 
     if (form.role === 'apoderado') {
       if (!form.studentName.trim()) {
-        next.studentName = 'El nombre del estááudiante es obligatorio.';
+        next.studentName = 'El nombre del estudiante es obligatorio.';
       }
       if (!form.studentStop.trim()) {
         next.studentStop = 'La dirección del domicilio o punto de recogida es obligatoria.';
@@ -93,12 +93,12 @@ export default function Registro() {
 
     } catch (err) {
       // Backend offline
-      setServerError(`No se pudo conectar al servidor backend. Asegúrate de que el backend estááé corriendo en ${API_BASE_URL}`);
+      setServerError(`No se pudo conectar al servidor backend. Asegúrate de que el backend esté corriendo en ${API_BASE_URL}`);
       setLoading(false);
       return;
     }
 
-    // Registro local para estááado de UI
+    // Registro local para estado de UI
     if (form.role === 'apoderado') {
       registerApoderadoWithStudent({
         parentName: form.nombre,
@@ -211,7 +211,7 @@ export default function Registro() {
                   </svg>
                   <span>
                     <strong>Conductor</strong>
-                    <small>Gestááionar mi ruta</small>
+                    <small>Gestionar mi ruta</small>
                   </span>
                 </button>
               </div>
@@ -295,7 +295,7 @@ export default function Registro() {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="reg-student-name">Nombre completo del estááudiante</label>
+                    <label htmlFor="reg-student-name">Nombre completo del estudiante</label>
                     <input
                       type="text"
                       name="studentName"
@@ -366,7 +366,7 @@ export default function Registro() {
           )}
 
           <div className="login-footer-links">
-            <p className="no-account-text">¿¿¿Ya tienes cuenta?</p>
+            <p className="no-account-text">¿Ya tienes cuenta?</p>
             <Link to="/login" className="register-link-btn">Inicia sesión</Link>
           </div>
         </div>

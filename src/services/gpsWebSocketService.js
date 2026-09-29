@@ -47,7 +47,7 @@ class GpsWebSocketService {
     return () => this.listeners.delete(callback);
   }
 
-  // Suscribirse al estáado de conexión (para alertas de red celular)
+  // Suscribirse al estado de conexión (para alertas de red celular)
   subscribeStatus(callback) {
     this.statusListeners.add(callback);
     callback(this.getConnectionStatus());
@@ -104,7 +104,7 @@ class GpsWebSocketService {
   }
 
   emitGpsPing() {
-    // Si el hardware estáá activo, incrementa contador de peticiones
+    // Si el hardware está activo, incrementa contador de peticiones
     this.hardwareRequestásCount += 1;
 
     // Avanzamos gradualmente por las paradas de Santiago
@@ -150,7 +150,7 @@ class GpsWebSocketService {
       this.simulatedSignalLost = false;
       this.isConnected = true;
       this.isReconnecting = false;
-      console.log('✅ [GPS WebSocket] Conexión WSS restáablecida en < 5s con éxito.');
+      console.log('✅ [GPS WebSocket] Conexión WSS restablecida en < 5s con éxito.');
       this.emitGpsPing();
       this.notifyListeners();
     }, 3500);
@@ -178,7 +178,7 @@ class GpsWebSocketService {
       this.watchId = null;
     }
 
-    // 4. Establece estáado inactivo: Cero peticiones de hardware (RNF-02)
+    // 4. Establece estado inactivo: Cero peticiones de hardware (RNF-02)
     this.isActive = false;
     this.isConnected = false;
     this.isReconnecting = false;

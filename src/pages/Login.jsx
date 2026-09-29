@@ -256,7 +256,7 @@ export default function Login() {
           </form>
 
           <div className="login-footer-links">
-            <p className="no-account-text">¿¿Sin cuenta?</p>
+            <p className="no-account-text">¿Sin cuenta?</p>
             <Link to="/registro" className="register-link-btn">Regístrate aquí</Link>
           </div>
 
@@ -265,7 +265,7 @@ export default function Login() {
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span>Tu información estáá protegida con encriptación de extremo a extremo</span>
+            <span>Tu información está protegida con encriptación de extremo a extremo</span>
           </div>
         </div>
       </div>

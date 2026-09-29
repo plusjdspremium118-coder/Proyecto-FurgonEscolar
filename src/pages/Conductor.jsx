@@ -27,7 +27,7 @@ export default function Conductor() {
   } = useTransportState();
 
   const [activeTab, setActiveTab] = useState('escolares');
-  // Filtro interactivo por estáado ('todos' | 'por_recoger' | 'a_bordo' | 'entregados' | 'ausentes')
+  // Filtro interactivo por estado ('todos' | 'por_recoger' | 'a_bordo' | 'entregados' | 'ausentes')
   const [filterStatus, setFilterStatus] = useState('todos');
   const [isDriveMode, setIsDriveMode] = useState(false);
   const [mapCenterPosition, setMapCenterPosition] = useState(null);
@@ -234,7 +234,7 @@ export default function Conductor() {
               <div>
                 <div className="flex items-center justify-between mb-1.5 px-0.5">
                   <p className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
-                    Filtrar por estáado
+                    Filtrar por estado
                   </p>
                   {filterStatus !== 'todos' && (
                     <button
@@ -543,7 +543,7 @@ export default function Conductor() {
                               </div>
                             </div>
 
-                            {/* Badge de estáado amplio y legible */}
+                            {/* Badge de estado amplio y legible */}
                             <span
                               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shrink-0 ${statusBadge.bg} ${statusBadge.text} ${statusBadge.border}`}
                             >
@@ -1054,7 +1054,7 @@ export default function Conductor() {
                     onChange={(e) => { setInputCloseCode(e.target.value); setCloseError(''); }}
                     placeholder="••••"
                     maxLength={4}
-                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold var(--ink)xl tracking-widestá text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl text-center font-mono font-bold var(--ink)xl tracking-widest text-[#0F172A] bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#E8A118] focus:outline-none transition-all"
                   />
                   {closeError && <p className="text-xs font-semibold text-[#DC2626]">{closeError}</p>}
                   <p className="text-[11px] text-[#94A3B8] text-center font-medium">PIN de prueba: 1234</p>

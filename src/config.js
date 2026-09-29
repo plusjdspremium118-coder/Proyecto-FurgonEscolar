@@ -7,8 +7,8 @@ export const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.e
 export const API_ENDPOINTS = {
   login: `${API_BASE_URL}/api/auth/login`,
   registro: `${API_BASE_URL}/api/auth/registro`,
-  estáudiantes: `${API_BASE_URL}/api/estáudiantes`,
-  estáudiantesApoderado: (id) => `${API_BASE_URL}/api/estáudiantes/apoderado/${id}`,
+  estudiantes: `${API_BASE_URL}/api/estudiantes`,
+  estudiantesApoderado: (id) => `${API_BASE_URL}/api/estudiantes/apoderado/${id}`,
   iniciarViaje: `${API_BASE_URL}/api/viaje/iniciar`,
   finalizarRecorrido: `${API_BASE_URL}/api/recorrido/finalizar`,
   asistenciaNoAsiste: `${API_BASE_URL}/api/asistencia/no-asiste`,

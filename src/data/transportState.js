@@ -1,5 +1,5 @@
 /**
- * transportState.js — Gestáor de estáado compartido con cumplimiento estáricto de casos de uso:
+ * transportState.js — Gestáor de estado compartido con cumplimiento estáricto de casos de uso:
  * - Autenticación y bloqueo de cuenta por 3 intentos fallidos
  * - Iniciar y Finalizar recorrido con código de seguridad (<extend> Ingresa código)
  * - Transmisión GPS en tiempo real
@@ -522,10 +522,10 @@ export const TransportActions = {
 
     if (noticeType === 'recogida_cerca') {
       title = '🔔 ¡Furgón aproximándose para recogida!';
-      message = `El conductor Carlos Pérez avisa que estáá a 3-5 minutos de recoger a ${student?.name}. Por favor prepárate en la parada.`;
+      message = `El conductor Carlos Pérez avisa que está a 3-5 minutos de recoger a ${student?.name}. Por favor prepárate en la parada.`;
     } else if (noticeType === 'entrega_cerca') {
       title = '🔔 ¡Furgón aproximándose para entrega!';
-      message = `El conductor avisa que estáá a 3 minutos de llegar al domicilio para entregar a ${student?.name}.`;
+      message = `El conductor avisa que está a 3 minutos de llegar al domicilio para entregar a ${student?.name}.`;
     }
 
     const notif = {
