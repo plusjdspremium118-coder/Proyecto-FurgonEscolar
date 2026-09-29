@@ -14,7 +14,7 @@ from security import hash_password
 env_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(env_path)
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://tpmbmaqfdwaqbombnkmt.supabase.co")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
 
 _supabase_client: Client = None
