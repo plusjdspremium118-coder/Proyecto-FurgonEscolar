@@ -1,8 +1,18 @@
-// Central Config for API Base URL
-// Can be configured via VITE_API_URL environment variable in Vercel, Netlify, Render, etc.
-export const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
+﻿// Central Config for API Base URL
+// In production (Netlify), it connects directly to Render: https://proyecto-furgonescolar.onrender.com
+// In local development, it connects to: http://localhost:8000
+
+const isLocalhost = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+const PROD_URL = 'https://proyecto-furgonescolar.onrender.com';
+const LOCAL_URL = 'http://localhost:8000';
+
+const ENV_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
   ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
-  : 'http://localhost:8000';
+  : null;
+
+export const API_BASE_URL = ENV_URL || (isLocalhost ? LOCAL_URL : PROD_URL);
 
 export const API_ENDPOINTS = {
   login: `${API_BASE_URL}/api/auth/login`,
