@@ -23,7 +23,12 @@ def get_supabase() -> Client:
     """Retorna la instancia única del cliente oficial de Supabase."""
     global _supabase_client
     if _supabase_client is None:
-        _supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        key = os.getenv('SUPABASE_KEY') or SUPABASE_KEY
+        url = os.getenv('SUPABASE_URL') or SUPABASE_URL
+        if not key:
+            load_dotenv(env_path)
+            key = os.getenv('SUPABASE_KEY', '')
+        _supabase_client = create_client(url, key)
     return _supabase_client
 
 # Alias para compatibilidad
